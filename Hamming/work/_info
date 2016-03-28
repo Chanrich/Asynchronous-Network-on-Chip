@@ -1,0 +1,191 @@
+m255
+K4
+z2
+13
+cModel Technology
+dC:\Users\Richard\Google Drive\EE552\HW4
+!i10d 8192
+!i10e 25
+!i10f 100
+YChannel
+Z0 DXx6 sv_std 3 std 0 22 `a<MJET1=lN@jzbA7kHm;1
+Z1 DXx4 work 16 SystemVerilogCSP 0 22 FIfFBBgnhJlfATIQSScUJ2
+DXx4 work 24 SystemVerilogCSP_sv_unit 0 22 SCYmFPRkJiRz9gN1Z5n?X2
+Z2 V`JN@9S9cnhjKRR_L]QIcM3
+r1
+31
+I]GC9dGR<RdW3T2zA6>5fO2
+S1
+Z3 dC:\Users\Richard\Documents\GitHub\Asynchronous-Network-on-Chip\Hamming
+Z4 w1454035328
+Z5 8C:/Users/Richard/Documents/GitHub/Asynchronous-Network-on-Chip/Hamming/SystemVerilogCSP.sv
+Z6 FC:/Users/Richard/Documents/GitHub/Asynchronous-Network-on-Chip/Hamming/SystemVerilogCSP.sv
+L0 24
+Z7 OL;L;10.2;57
+Z8 !s108 1459200777.697000
+Z9 !s107 C:/Users/Richard/Documents/GitHub/Asynchronous-Network-on-Chip/Hamming/SystemVerilogCSP.sv|
+Z10 !s90 -reportprogress|300|-work|work|-vopt|-sv|C:/Users/Richard/Documents/GitHub/Asynchronous-Network-on-Chip/Hamming/SystemVerilogCSP.sv|
+Z11 o-work work -sv -L mtiAvm -L mtiOvm -L mtiUvm -L mtiUPF
+n@channel
+!s85 0
+!s100 U[z:MCU^TkaSA0?JiJW4B1
+!s105 SystemVerilogCSP_sv_unit
+!i10b 1
+vdata_bucket
+Z12 DXx6 sv_std 3 std 0 22 `a<MJET1=lN@jzbA7kHm;1
+R1
+Z13 DXx4 work 11 edu_sv_unit 0 22 5[S9BbZcjYjBIO1K5oiHL2
+R2
+r1
+!s85 0
+31
+I^2_l4U@HQH:m31aCmnRWM3
+Z14 !s105 edu_sv_unit
+S1
+R3
+Z15 w1459200775
+Z16 8C:/Users/Richard/Documents/GitHub/Asynchronous-Network-on-Chip/Hamming/edu.sv
+Z17 FC:/Users/Richard/Documents/GitHub/Asynchronous-Network-on-Chip/Hamming/edu.sv
+L0 25
+R7
+Z18 !s108 1459200777.857000
+Z19 !s107 C:/Users/Richard/Documents/GitHub/Asynchronous-Network-on-Chip/Hamming/edu.sv|
+Z20 !s90 -reportprogress|300|-work|work|-vopt|-sv|C:/Users/Richard/Documents/GitHub/Asynchronous-Network-on-Chip/Hamming/edu.sv|
+R11
+!s100 =f_Qc6]n?BlX]FZaSLMNJ0
+!i10b 1
+vdata_generator
+R12
+R1
+R13
+R2
+r1
+31
+IT_0hYT5bbk@Amg<OEd[Rz0
+R14
+S1
+R3
+R15
+R16
+R17
+L0 5
+R7
+R18
+R19
+R20
+R11
+!s85 0
+!s100 JSOIjU;JKliAh2AK_JH8K2
+!i10b 1
+vedu
+R12
+R1
+R13
+R2
+r1
+31
+IIcTNi<Bo?;E`S5izl5Zm03
+R14
+S1
+R3
+R15
+R16
+R17
+L0 60
+R7
+R18
+R19
+R20
+R11
+!s85 0
+!i10b 1
+!s100 io<?Mk_zT2YB3BV:8TAYO2
+Xedu_sv_unit
+R12
+R1
+V5[S9BbZcjYjBIO1K5oiHL2
+r1
+31
+I5[S9BbZcjYjBIO1K5oiHL2
+S1
+R3
+R15
+R16
+R17
+L0 2
+R7
+R18
+R19
+R20
+R11
+!s85 0
+!i10b 1
+!s100 QKk_LaRboUc^zg9UAbzcH1
+!i103 1
+vedu_tb
+R12
+R1
+R13
+R2
+r1
+31
+IG`BH=OR7No]PNAe^9oG`k1
+R14
+S1
+R3
+R15
+R16
+R17
+L0 108
+R7
+R18
+R19
+R20
+R11
+!s85 0
+!i10b 1
+!s100 ok=1:6E^NflD=Mn:KNn<c1
+XSystemVerilogCSP
+R12
+VFIfFBBgnhJlfATIQSScUJ2
+r1
+31
+IFIfFBBgnhJlfATIQSScUJ2
+S1
+R3
+R4
+R5
+R6
+L0 15
+R7
+R8
+R9
+R10
+R11
+n@system@verilog@c@s@p
+!s85 0
+!s100 X3bR2`C[G08iR^LQRPdUB0
+!i10b 1
+XSystemVerilogCSP_sv_unit
+R12
+R1
+VSCYmFPRkJiRz9gN1Z5n?X2
+r1
+31
+ISCYmFPRkJiRz9gN1Z5n?X2
+S1
+R3
+R4
+R5
+R6
+L0 22
+R7
+R8
+R9
+R10
+R11
+n@system@verilog@c@s@p_sv_unit
+!s85 0
+!s100 [07Qk=m_Bz`ZnjAOkTi6M0
+!i10b 1
+!i103 1

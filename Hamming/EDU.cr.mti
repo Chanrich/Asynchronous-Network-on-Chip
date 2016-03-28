@@ -1,0 +1,26 @@
+C:/Users/Richard/Documents/GitHub/Asynchronous-Network-on-Chip/Hamming/edu.sv {2 {vlog -work work -vopt -sv C:/Users/Richard/Documents/GitHub/Asynchronous-Network-on-Chip/Hamming/edu.sv
+Model Technology ModelSim SE-64 vlog 10.2 Compiler 2013.02 Feb  2 2013
+** Warning: C:/Users/Richard/Documents/GitHub/Asynchronous-Network-on-Chip/Hamming/edu.sv(52): (vlog-2643) Unterminated string literal continues onto next line.
+
+-- Compiling package edu_sv_unit
+-- Importing package SystemVerilogCSP
+-- Compiling module data_generator
+-- Compiling module data_bucket
+-- Compiling module edu
+-- Compiling module edu_tb
+
+Top level modules:
+	edu_tb
+
+} {} {}} C:/Users/Richard/Documents/GitHub/Asynchronous-Network-on-Chip/Hamming/SystemVerilogCSP.sv {1 {vlog -work work -vopt -sv C:/Users/Richard/Documents/GitHub/Asynchronous-Network-on-Chip/Hamming/SystemVerilogCSP.sv
+Model Technology ModelSim SE-64 vlog 10.2 Compiler 2013.02 Feb  2 2013
+-- Compiling package SystemVerilogCSP
+-- Compiling interface Channel
+-- Compiling package SystemVerilogCSP_sv_unit
+-- Importing package SystemVerilogCSP
+-- Compiling interface Channel
+
+Top level modules:
+	--none--
+
+} {} {}}
