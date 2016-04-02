@@ -1,0 +1,335 @@
+m255
+K4
+z2
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+dC:/Modeltech_pe_edu_10.4a/examples
+varbiter2
+Z0 DXx6 sv_std 3 std 0 22 WmjPaeP=7F5?QFXzJ>D[Q2
+Z1 DXx4 work 16 SystemVerilogCSP 0 22 @7<m>gEMOThbIAA6EbaEJ0
+Z2 DXx4 work 25 data_split_module_sv_unit 0 22 dK7]V?Znhk@;5A9h==8h[2
+Z3 VDg1SIo80bB@j0V0VzS_@n1
+r1
+!s85 0
+31
+!i10b 1
+!s100 OWKf98^M8Sn[?X?OUkMNU0
+IKRAX[=KQSYfeP4b?coU0A3
+Z4 !s105 data_split_module_sv_unit
+S1
+Z5 dC:/Users/Danny/Desktop/ee552_final_project/code
+Z6 w1459472259
+Z7 8C:/Users/Danny/Desktop/ee552_final_project/code/data_split_module.sv
+Z8 FC:/Users/Danny/Desktop/ee552_final_project/code/data_split_module.sv
+L0 61
+Z9 OP;L;10.4a;61
+Z10 !s108 1459472273.000000
+Z11 !s107 C:/Users/Danny/Desktop/ee552_final_project/code/data_split_module.sv|
+Z12 !s90 -reportprogress|300|-work|work|-sv|-stats=none|C:/Users/Danny/Desktop/ee552_final_project/code/data_split_module.sv|
+!s101 -O0
+!i113 1
+Z13 o-work work -sv -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact -O0
+varbiter2_tb
+R0
+R1
+DXx4 work 25 data_split_module_sv_unit 0 22 fcOgf<lmOg3EP<oFa7RVd1
+R3
+r1
+!s85 0
+31
+!i10b 1
+!s100 j;o8o;g8VdEVO8a^66CR^2
+I_zkHHg;<Dgk3k9>D1NnTm1
+R4
+S1
+R5
+w1459406066
+R7
+R8
+L0 227
+R9
+!s108 1459471219.000000
+R11
+R12
+!s101 -O0
+!i113 1
+R13
+varbiter3
+R0
+R1
+R2
+R3
+r1
+!s85 0
+31
+!i10b 1
+!s100 Oe8`;DO9XW;1Y`dCREYg_0
+I;H^M18lMzEQoKoI;0fFQN1
+R4
+S1
+R5
+R6
+R7
+R8
+L0 120
+R9
+R10
+R11
+R12
+!s101 -O0
+!i113 1
+R13
+varbiter3in
+R0
+R1
+DXx4 work 25 data_split_module_sv_unit 0 22 4=>eiddCS_WbXM;[1hf0h1
+R3
+r1
+!s85 0
+31
+!i10b 1
+!s100 ko>Mn6YameeEHadPT1KXg0
+IRD@b5ozAAn]2X6oz8M3^@0
+R4
+S1
+R5
+w1459403498
+R7
+R8
+L0 109
+R9
+!s108 1459403506.000000
+R11
+R12
+!s101 -O0
+!i113 1
+R13
+vbitSlicer
+R0
+R1
+R2
+R3
+r1
+!s85 0
+31
+!i10b 1
+!s100 0IGn;ChSe^T_9>E:[U:f:2
+IM>M2`[W;Mhll;6HUmU`UF2
+R4
+S1
+R5
+R6
+R7
+R8
+L0 211
+R9
+R10
+R11
+R12
+!s101 -O0
+!i113 1
+R13
+nbit@slicer
+YChannel
+R0
+R1
+DXx4 work 24 SystemVerilogCSP_sv_unit 0 22 ROn:3me[1SL[D65gP0OnH1
+R3
+r1
+!s85 0
+31
+!i10b 1
+!s100 Dl8TPL8nANjeLGjlK`j>o2
+IGJ08mgGd[`cb?;fT=onY70
+!s105 SystemVerilogCSP_sv_unit
+S1
+R5
+Z14 w1454418209
+Z15 8C:/Users/Danny/Desktop/ee552_final_project/code/SystemVerilogCSP.sv
+Z16 FC:/Users/Danny/Desktop/ee552_final_project/code/SystemVerilogCSP.sv
+L0 24
+R9
+R10
+Z17 !s107 C:/Users/Danny/Desktop/ee552_final_project/code/SystemVerilogCSP.sv|
+Z18 !s90 -reportprogress|300|-work|work|-sv|-stats=none|C:/Users/Danny/Desktop/ee552_final_project/code/SystemVerilogCSP.sv|
+!s101 -O0
+!i113 1
+R13
+n@channel
+vdata_bucket
+R0
+R1
+R2
+R3
+r1
+!s85 0
+31
+!i10b 1
+!s100 :TF3a2KZB]JJW><aQkh8Z2
+I4D;Bg^HidcJiNH?zV6]813
+R4
+S1
+R5
+R6
+R7
+R8
+L0 29
+R9
+R10
+R11
+R12
+!s101 -O0
+!i113 1
+R13
+vdata_generator
+R0
+R1
+R2
+R3
+r1
+!s85 0
+31
+!i10b 1
+!s100 aad2A87ncONbT]:z]^0_z2
+ILJ0W9l91M>ClWdbDXZ8j52
+R4
+S1
+R5
+R6
+R7
+R8
+L0 5
+R9
+R10
+R11
+R12
+!s101 -O0
+!i113 1
+R13
+Xdata_split_module_sv_unit
+R0
+R1
+VdK7]V?Znhk@;5A9h==8h[2
+r1
+!s85 0
+31
+!i10b 1
+!s100 KKMVz?Mf8eIZM8PUK9Jg`2
+IdK7]V?Znhk@;5A9h==8h[2
+!i103 1
+S1
+R5
+R6
+R7
+R8
+L0 2
+R9
+R10
+R11
+R12
+!s101 -O0
+!i113 1
+R13
+vdata_splitter_tb
+R0
+R1
+R2
+R3
+r1
+!s85 0
+31
+!i10b 1
+!s100 gJA89L>mZnWHhJ8S8K5ML1
+IJQ;nL3J1<OF>_g]3dVMSR1
+R4
+S1
+R5
+R6
+R7
+R8
+L0 285
+R9
+R10
+R11
+R12
+!s101 -O0
+!i113 1
+R13
+vmerge
+R0
+R1
+R2
+R3
+r1
+!s85 0
+31
+!i10b 1
+!s100 eG>o[6<?d1YacWzTI`c9D3
+I3ViW;dY[PgZmn[ezO?fO03
+R4
+S1
+R5
+R6
+R7
+R8
+L0 188
+R9
+R10
+R11
+R12
+!s101 -O0
+!i113 1
+R13
+XSystemVerilogCSP
+R0
+!s110 1459472273
+!i10b 1
+!s100 Sd@:S@ckz[LWGOlcJb1P`3
+I@7<m>gEMOThbIAA6EbaEJ0
+V@7<m>gEMOThbIAA6EbaEJ0
+S1
+R5
+R14
+R15
+R16
+L0 15
+R9
+r1
+!s85 0
+31
+R10
+R17
+R18
+!s101 -O0
+!i113 1
+R13
+n@system@verilog@c@s@p
+XSystemVerilogCSP_sv_unit
+R0
+R1
+VROn:3me[1SL[D65gP0OnH1
+r1
+!s85 0
+31
+!i10b 1
+!s100 VFJOQ8ED]7[Gd<mA12MG23
+IROn:3me[1SL[D65gP0OnH1
+!i103 1
+S1
+R5
+R14
+R15
+R16
+L0 22
+R9
+R10
+R17
+R18
+!s101 -O0
+!i113 1
+R13
+n@system@verilog@c@s@p_sv_unit
