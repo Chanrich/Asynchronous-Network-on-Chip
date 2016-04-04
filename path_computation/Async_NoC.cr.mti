@@ -1,0 +1,27 @@
+C:/Users/timet/Desktop/Async_NoC/path_comp.sv {1 {vlog -work work -sv -stats=none C:/Users/timet/Desktop/Async_NoC/path_comp.sv
+Model Technology ModelSim PE Student Edition vlog 10.4a Compiler 2015.03 Apr  7 2015
+-- Compiling package path_comp_sv_unit
+-- Importing package SystemVerilogCSP
+-- Compiling module split_4
+-- Compiling module split_2
+-- Compiling module check_position
+-- Compiling module two_input_xor
+-- Compiling module concatenate_module
+-- Compiling module path_computation_module
+-- Compiling module computation_module_tb
+
+Top level modules:
+	computation_module_tb
+
+} {} {}} C:/Users/timet/Desktop/Async_NoC/SystemVerilogCSP.sv {1 {vlog -work work -sv -stats=none C:/Users/timet/Desktop/Async_NoC/SystemVerilogCSP.sv
+Model Technology ModelSim PE Student Edition vlog 10.4a Compiler 2015.03 Apr  7 2015
+-- Compiling package SystemVerilogCSP
+-- Compiling interface Channel
+-- Compiling package SystemVerilogCSP_sv_unit
+-- Importing package SystemVerilogCSP
+-- Compiling interface Channel
+
+Top level modules:
+	--none--
+
+} {} {}}
