@@ -58,179 +58,7 @@ module data_bucket (interface l);
   end
 endmodule
 
-module arbiter2 (interface in0, interface in1, interface out, interface ctr);
-	parameter WIDTH = 11;
-	parameter FL = 2;
-	parameter BL = 2;
-	logic select=0;
-	logic [WIDTH-1:0] data;
-	logic [1:0] control = 1;
-	always
-	begin
-		wait((in0.status != idle) || (in1.status != idle)); //wait until 1 of the input ports has a token
-		
-		if((in0.status != idle) && (in1.status != idle)) //if both ports have tokens
-		begin
-			if(select == 0)
-			begin
-				in0.Receive(data);
-				#FL;
-				fork
-				out.Send(data);
-				control = 0;	// Control 0
-				ctr.Send(control);
-				join
-				#BL;
-			end
-			else if(select == 1)
-			begin
-				in1.Receive(data);
-				#FL;
-				fork
-				out.Send(data);
-				control = 1;	// Control 1
-				ctr.Send(control);
-				join
-				#BL;
-			end
-			select = ~select;
-		end
-		else if(in0.status != idle) //if input0 has token ready
-		begin
-				in0.Receive(data);
-				#FL;
-				$display("data=%b",data);
-				fork
-				out.Send(data);
-				control = 0;	// Control 0
-				ctr.Send(control);
-				join
-				#BL;
-		end
-		else if(in1.status != idle) //if input1 has token ready
-		begin
-				in1.Receive(data);
-				#FL;
-				fork
-				out.Send(data);
-				control = 1;	// Control 1
-				ctr.Send(control);
-				join
-				#BL;
-		end
-	end
-endmodule // arbiter2in
 
-module arbiter2_no_data (interface in0, interface in1, interface ctr);
-	parameter FL = 2;
-	parameter BL = 2;
-	logic select = 0;
-	logic [1:0] control = 1;
-	always
-	begin
-		wait((in0.status != idle) || (in1.status != idle)); //wait until 1 of the input ports has a token
-		
-		if((in0.status != idle) && (in1.status != idle)) //if both ports have tokens
-		begin
-			if(select == 0)
-			begin
-				in0.Receive(control);
-				#FL;
-				ctr.Send(control);
-				#BL;
-			end
-			else if(select == 1)
-			begin
-				in1.Receive(control);
-				#FL;
-				ctr.Send(control);
-				#BL;
-			end
-			select = ~select;
-		end
-		else if(in0.status != idle) //if input0 has token ready
-		begin
-				in0.Receive(control);
-				#FL;
-				ctr.Send(control);
-				#BL;
-		end
-		else if(in1.status != idle) //if input1 has token ready
-		begin
-				in1.Receive(control);
-				#FL;
-				ctr.Send(control);
-				#BL;
-		end
-	end
-endmodule // arbiter2in
-
-module arbiter3 (interface in0, interface in1, interface in2, interface out);
-	parameter WIDTH = 2;
-	parameter FL = 2;
-	parameter BL = 2;
-	logic [1:0] select=0;
-	logic data;
-	logic [1:0] selOut;
-
-	always
-	begin
-		wait((in0.status != idle) || (in1.status != idle) || (in2.status != idle)); //wait until 1 of the input ports has a token
-		
-		if((in0.status != idle) && (in1.status != idle) && (in2.status != idle)) //if all three ports have tokens
-		begin
-			if(select == 0)
-			begin
-				in0.Receive(data);
-				#FL;
-				selOut = 01;
-				out.Send(selOut);
-				#BL;
-			end
-			else if(select == 1)
-			begin
-				in1.Receive(data);
-				#FL;
-				selOut = 01;
-				out.Send(selOut);
-				#BL;
-			end
-			else if(select == 2)
-			begin
-				in2.Receive(data);
-				#FL;
-				selOut = 10;
-				out.Send(selOut);
-				#BL;
-			end
-			select = (select + 1) % 4;
-		end
-		else if(in0.status != idle) //if input0 has token ready
-		begin
-				in0.Receive(data);
-				#FL;
-				selOut = 00;
-				out.Send(selOut);
-				#BL;
-		end
-		else if(in1.status != idle) //if input0 has token ready
-		begin
-				in1.Receive(data);
-				#FL;
-				selOut = 01;
-				out.Send(selOut);
-				#BL;
-		end
-		else if(in2.status != idle) //if input0 has token ready
-		begin
-				in2.Receive(data);
-				#FL;
-				selOut = 10;
-				out.Send(selOut);
-				#BL;
-		end
-	end
-endmodule // arbiter3in
 
   //merge module
   module merge (interface inPort0, interface inPort1, interface inPort2, interface controlPort, interface outPort);
@@ -283,31 +111,16 @@ endmodule
 
 
 
-module input_process_block(interface in1, interface in2, interface in3, interface in4,
-							interface core_data, interface core_control,
+module input_process_block(interface input1_to_merge, interface input2_to_merge, interface core_data,
+							interface merge_control,
 							interface addr_out, interface hamming_out);
 	// inputs take 11 bits
-	Channel #(.hsProtocol(P4PhaseBD), .WIDTH(11)) data_intf[2:0] (); 
+	Channel #(.hsProtocol(P4PhaseBD), .WIDTH(11)) data_intf (); 
 	Channel #(.hsProtocol(P4PhaseBD), .WIDTH(2)) control_intf[3:0] (); 
 
-	arbiter2 #(.WIDTH(11), .FL(2), .BL(2)) ar1(.in0(in1), .in1(in2), .out(data_intf[0]), .ctr(control_intf[0]));
-		// ctr goes to ar2_no_data1's in0
-	arbiter2 #(.WIDTH(11), .FL(2), .BL(2)) ar2(.in0(in3), .in1(in4), .out(data_intf[1]), .ctr(control_intf[1]));
-		// ctr goes to ar2_no_data1's in1
-	// Cascadubg two 2-inputs arbiter
-	arbiter2_no_data #(.FL(2), .BL(2)) ar2_no_data1(.in0(control_intf[0]), .in1(control_intf[1]), .ctr(control_intf[2]));
-		// in0 from ar1's ctr port
-		// in1 from ar2's ctr port
-		// ctr goes to ar2_no_data2's in0
-	arbiter2_no_data #(.FL(2), .BL(2)) ar2_no_data2(.in0(control_intf[2]), .in1(core_control), .ctr(control_intf[3])); 
-		// in0 from ctr of 'ar2_no_data1'
-		// in1 from core
-		// ctr goes to 'merge' control
-
-
 	// arbiter3 #(.WIDTH(11), .FL(2), .BL(2)) ar3(.in0(intf[5]), .in1(intf[7]), .in2(intf[9]), .out(intf[13]));
-	merge #(.WIDTH(11), .FL(0), .BL(0)) mg(.inPort0(data_intf[0]), .inPort1(data_intf[1]), .inPort2(core_data), .controlPort(control_intf[3]), .outPort(data_intf[2]));
-	bitSlicer #(.FL(0), .BL(0)) bs(.in(data_intf[2]), .dataOut(hamming_out), .addressOut(addr_out));
+	merge #(.WIDTH(11), .FL(0), .BL(0)) mg(.inPort0(input1_to_merge), .inPort1(input2_to_merge), .inPort2(core_data), .controlPort(merge_control), .outPort(data_intf));
+	bitSlicer #(.FL(0), .BL(0)) bs(.in(data_intf), .dataOut(hamming_out), .addressOut(addr_out));
 
 endmodule
 /*module arbiter2_tb;
