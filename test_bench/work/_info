@@ -1,0 +1,234 @@
+m255
+K4
+z2
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+dC:/Modeltech_pe_edu_10.4a/examples
+YChannel
+Z0 DXx6 sv_std 3 std 0 22 WmjPaeP=7F5?QFXzJ>D[Q2
+Z1 DXx4 work 16 SystemVerilogCSP 0 22 6lzKhSbV_5_ni_ZZ4Ud3n0
+DXx4 work 24 SystemVerilogCSP_sv_unit 0 22 :@ZNRg3d9<9`i`IVh5UX>2
+Z2 VDg1SIo80bB@j0V0VzS_@n1
+r1
+!s85 0
+31
+!i10b 1
+!s100 5bNio8l@?O=mNzENl0a:E2
+IAZJfNGNGEbLkaTzgLWFbh1
+!s105 SystemVerilogCSP_sv_unit
+S1
+Z3 dC:/Users/timet/Desktop/test_bench
+Z4 w1459721487
+Z5 8C:/Users/timet/Desktop/test_bench/SystemVerilogCSP.sv
+Z6 FC:/Users/timet/Desktop/test_bench/SystemVerilogCSP.sv
+L0 24
+Z7 OP;L;10.4a;61
+Z8 !s108 1459753068.000000
+Z9 !s107 C:/Users/timet/Desktop/test_bench/SystemVerilogCSP.sv|
+Z10 !s90 -reportprogress|300|-work|work|-sv|-stats=none|C:/Users/timet/Desktop/test_bench/SystemVerilogCSP.sv|
+!s101 -O0
+!i113 1
+Z11 o-work work -sv -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact -O0
+n@channel
+vdata_bucket
+R0
+R1
+Z12 DXx4 work 18 test_bench_sv_unit 0 22 L97_@L2WnJPCLb[06[X>S1
+R2
+r1
+!s85 0
+31
+!i10b 1
+!s100 S=0WUd>@?8[Eb9o]mNo0c3
+I^oRIUzgZzC[=V9dT[[n071
+Z13 !s105 test_bench_sv_unit
+S1
+R3
+Z14 w1459753064
+Z15 8C:/Users/timet/Desktop/test_bench/test_bench.sv
+Z16 FC:/Users/timet/Desktop/test_bench/test_bench.sv
+L0 47
+R7
+R8
+Z17 !s107 C:/Users/timet/Desktop/test_bench/test_bench.sv|
+Z18 !s90 -reportprogress|300|-work|work|-sv|-stats=none|C:/Users/timet/Desktop/test_bench/test_bench.sv|
+!s101 -O0
+!i113 1
+R11
+vdata_generator
+R0
+R1
+R12
+R2
+r1
+!s85 0
+31
+!i10b 1
+!s100 F`Naj6TB5HYZe0FFUXU^n1
+IV8]JTMzCW0^_O7FXm`^DH1
+R13
+S1
+R3
+R14
+R15
+R16
+L0 5
+R7
+R8
+R17
+R18
+!s101 -O0
+!i113 1
+R11
+vmerge
+R0
+R1
+DXx4 work 18 test_bench_sv_unit 0 22 ;`<l:^IM<lFn;Q<PX7>i32
+R2
+r1
+!s85 0
+31
+!i10b 1
+!s100 ;o=4dc4SBXAFV?iRZCP`D1
+I5jMg0jAKGV@7`FT0;iQM@2
+R13
+S1
+R3
+w1459749944
+R15
+R16
+L0 123
+R7
+!s108 1459749949.000000
+R17
+R18
+!s101 -O0
+!i113 1
+R11
+vsplit
+R0
+R1
+R12
+R2
+r1
+!s85 0
+31
+!i10b 1
+!s100 e:OWM5ClXPHC:UGS5OVe03
+IUJ=OoAHFP_hWChCol<2mI3
+R13
+S1
+R3
+R14
+R15
+R16
+L0 83
+R7
+R8
+R17
+R18
+!s101 -O0
+!i113 1
+R11
+XSystemVerilogCSP
+R0
+!s110 1459753068
+!i10b 1
+!s100 Sd@:S@ckz[LWGOlcJb1P`3
+I6lzKhSbV_5_ni_ZZ4Ud3n0
+V6lzKhSbV_5_ni_ZZ4Ud3n0
+S1
+R3
+R4
+R5
+R6
+L0 15
+R7
+r1
+!s85 0
+31
+R8
+R9
+R10
+!s101 -O0
+!i113 1
+R11
+n@system@verilog@c@s@p
+XSystemVerilogCSP_sv_unit
+R0
+R1
+V:@ZNRg3d9<9`i`IVh5UX>2
+r1
+!s85 0
+31
+!i10b 1
+!s100 VFJOQ8ED]7[Gd<mA12MG23
+I:@ZNRg3d9<9`i`IVh5UX>2
+!i103 1
+S1
+R3
+R4
+R5
+R6
+L0 22
+R7
+R8
+R9
+R10
+!s101 -O0
+!i113 1
+R11
+n@system@verilog@c@s@p_sv_unit
+vtb_module
+R0
+R1
+R12
+R2
+r1
+!s85 0
+31
+!i10b 1
+!s100 A9SF<M;Kk8eK73;kbo7YA3
+Ik9oEaQdE^3j2l44ebLI<^3
+R13
+S1
+R3
+R14
+R15
+R16
+L0 128
+R7
+R8
+R17
+R18
+!s101 -O0
+!i113 1
+R11
+Xtest_bench_sv_unit
+R0
+R1
+VL97_@L2WnJPCLb[06[X>S1
+r1
+!s85 0
+31
+!i10b 1
+!s100 A9Z=d^ME^HQc0KOzY<`WW2
+IL97_@L2WnJPCLb[06[X>S1
+!i103 1
+S1
+R3
+R14
+R15
+R16
+L0 3
+R7
+R8
+R17
+R18
+!s101 -O0
+!i113 1
+R11
