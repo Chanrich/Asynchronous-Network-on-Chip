@@ -1,0 +1,209 @@
+m255
+K4
+z2
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+dC:/Users/timet/Desktop/test_bench
+YChannel
+Z0 DXx6 sv_std 3 std 0 22 WmjPaeP=7F5?QFXzJ>D[Q2
+Z1 DXx4 work 16 SystemVerilogCSP 0 22 =1W5j[;SG860a3SJM63mB1
+DXx4 work 24 SystemVerilogCSP_sv_unit 0 22 1ScNz8Mb==HGMY_i??K[^1
+Z2 VDg1SIo80bB@j0V0VzS_@n1
+r1
+!s85 0
+31
+!i10b 1
+!s100 Dl8TPL8nANjeLGjlK`j>o2
+IZN1THS8g3>J]TOoTn1ad]2
+!s105 SystemVerilogCSP_sv_unit
+S1
+Z3 dC:/Users/timet/Desktop/Asynchronous-Network-on-Chip/Core
+Z4 w1459901708
+Z5 8C:/Users/timet/Desktop/Asynchronous-Network-on-Chip/Core/SystemVerilogCSP.sv
+Z6 FC:/Users/timet/Desktop/Asynchronous-Network-on-Chip/Core/SystemVerilogCSP.sv
+L0 24
+Z7 OP;L;10.4a;61
+Z8 !s108 1459902301.000000
+Z9 !s107 C:/Users/timet/Desktop/Asynchronous-Network-on-Chip/Core/SystemVerilogCSP.sv|
+Z10 !s90 -reportprogress|300|-work|work|-sv|-stats=none|C:/Users/timet/Desktop/Asynchronous-Network-on-Chip/Core/SystemVerilogCSP.sv|
+!s101 -O0
+!i113 1
+Z11 o-work work -sv -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact -O0
+n@channel
+vcore
+R0
+R1
+Z12 DXx4 work 12 core_sv_unit 0 22 kocS_O@X?zRYBIg8Njn@10
+R2
+r1
+!s85 0
+31
+!i10b 1
+!s100 CXOLck?;?LgSaoJ6?dR3Q2
+IDjSAKGVOhoQaa3^XlXLlY0
+Z13 !s105 core_sv_unit
+S1
+R3
+Z14 w1459902297
+Z15 8C:/Users/timet/Desktop/Asynchronous-Network-on-Chip/Core/core.sv
+Z16 FC:/Users/timet/Desktop/Asynchronous-Network-on-Chip/Core/core.sv
+L0 4
+R7
+R8
+Z17 !s107 C:/Users/timet/Desktop/Asynchronous-Network-on-Chip/Core/core.sv|
+Z18 !s90 -reportprogress|300|-work|work|-sv|-stats=none|C:/Users/timet/Desktop/Asynchronous-Network-on-Chip/Core/core.sv|
+!s101 -O0
+!i113 1
+R11
+Xcore_sv_unit
+R0
+R1
+VkocS_O@X?zRYBIg8Njn@10
+r1
+!s85 0
+31
+!i10b 1
+!s100 >lzQRn7XUI8bOOOeLDFof2
+IkocS_O@X?zRYBIg8Njn@10
+!i103 1
+S1
+R3
+R14
+R15
+R16
+L0 2
+R7
+R8
+R17
+R18
+!s101 -O0
+!i113 1
+R11
+vcore_tb
+R0
+R1
+R12
+R2
+r1
+!s85 0
+31
+!i10b 1
+!s100 1TH1XMCG;eRV[R==>A]W22
+IKQ?>Il9FBCC;hHC@mQ6Y62
+R13
+S1
+R3
+R14
+R15
+R16
+L0 167
+R7
+R8
+R17
+R18
+!s101 -O0
+!i113 1
+R11
+vdata_bucket
+R0
+R1
+R12
+R2
+r1
+!s85 0
+31
+!i10b 1
+!s100 1h2Q?7CU]kng9^aMW7BL_0
+IDeXHVjSd3;jAA9EnSbRBM1
+R13
+S1
+R3
+R14
+R15
+R16
+L0 155
+R7
+R8
+R17
+R18
+!s101 -O0
+!i113 1
+R11
+vdata_generator
+R0
+R1
+R12
+R2
+r1
+!s85 0
+31
+!i10b 1
+!s100 >h3_RiB@]J]3YVaY4:m8c0
+I;4nWTm0mPYdc1d1n3<:Qn0
+R13
+S1
+R3
+R14
+R15
+R16
+L0 141
+R7
+R8
+R17
+R18
+!s101 -O0
+!i113 1
+R11
+XSystemVerilogCSP
+R0
+!s110 1459902301
+!i10b 1
+!s100 Sd@:S@ckz[LWGOlcJb1P`3
+I=1W5j[;SG860a3SJM63mB1
+V=1W5j[;SG860a3SJM63mB1
+S1
+R3
+R4
+R5
+R6
+L0 15
+R7
+r1
+!s85 0
+31
+R8
+R9
+R10
+!s101 -O0
+!i113 1
+R11
+n@system@verilog@c@s@p
+XSystemVerilogCSP_sv_unit
+R0
+R1
+V1ScNz8Mb==HGMY_i??K[^1
+r1
+!s85 0
+31
+!i10b 1
+!s100 VFJOQ8ED]7[Gd<mA12MG23
+I1ScNz8Mb==HGMY_i??K[^1
+!i103 1
+S1
+R3
+R4
+R5
+R6
+L0 22
+R7
+R8
+R9
+R10
+!s101 -O0
+!i113 1
+R11
+n@system@verilog@c@s@p_sv_unit

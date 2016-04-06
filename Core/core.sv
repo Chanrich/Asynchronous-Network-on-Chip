@@ -3,16 +3,16 @@ import SystemVerilogCSP::*;
 
 module core (interface dg_8b, interface db_8b, interface data_out_11b, interface data_control_out, interface data_in_11b);
     parameter FL = 2;
-	parameter BL = 2;  logic [WIDTH-1:0] SendValue=0;
+	parameter BL = 2;  
 	logic select=0;
 	logic [10:0] router_data;
 	logic [7:0] dg_data;
 	logic [7:0] db_data;
 	logic [10:0] output_data;
-	logic [1:0] control = 1;
+	logic [1:0] control = 2;
 	logic [6:0] raw_data;
 	
-	task calc_parity(input [7:0] data, output [10:0] data_out);
+	task automatic calc_parity(input [7:0] data, output [10:0] data_out);
 		// Take input 8-bit data, and output 11-bit data including IP, data and parity bits
 		// Calculate and combine parity bits in output
 		logic [10:0] in_data;
@@ -27,7 +27,7 @@ module core (interface dg_8b, interface db_8b, interface data_out_11b, interface
 		data_out = in_data;	
 	endtask
 
-	task hamming_fix(ref [6:0] raw_data_ref);
+	task automatic hamming_fix(ref [6:0] raw_data_ref);
 		logic P1;
 		logic P2;
 		logic P4;
@@ -71,8 +71,6 @@ module core (interface dg_8b, interface db_8b, interface data_out_11b, interface
 
 				// Calculate and combine parity bits in output
 				calc_parity(dg_data, output_data);
-				// Set control bit for input processing unit, 2 is predefined to select data from this module
-				control = 2;
 				#FL;
 
 				fork
@@ -107,8 +105,6 @@ module core (interface dg_8b, interface db_8b, interface data_out_11b, interface
 
 				// Calculate and combine parity bits in output
 				calc_parity(dg_data, output_data);
-				// Set control bit for input processing unit, 2 is predefined to select data from this module
-				control = 2;
 				#FL;
 
 				fork
@@ -170,11 +166,11 @@ module core_tb;
 	Channel #(.hsProtocol(P4PhaseBD), .WIDTH(2)) intf_2b (); 
 
 	data_generator #(.WIDTH(8), .FL(0), .DELAY(5)) dg1(.r(intf[0]));
-	data_generator #(.WIDTH(11), .FL(0), .DELAY(5)) dg1(.r(intf_11b[1]));
+	data_generator #(.WIDTH(11), .FL(0), .DELAY(30)) dg2(.r(intf_11b[1]));
 
-	core core (.dg_8b(intf[0]), .db_8b(intf[1]), .data_out_11b(intf_11b[0]), .data_control_out(intf_2b), .data_in_11b(intf_11b[1]] ));
+	core core (.dg_8b(intf[0]), .db_8b(intf[1]), .data_out_11b(intf_11b[0]), .data_control_out(intf_2b), .data_in_11b(intf_11b[1]));
 
 	data_bucket #(.WIDTH(2), .BL(0)) db1(.l(intf_2b));
-	data_bucket #(.WIDTH(11), .BL(0)) db1(.l(intf_11b[0]));
-	data_bucket #(.WIDTH(8), .BL(0)) db1(.l(intf[1]));
+	data_bucket #(.WIDTH(11), .BL(0)) db2(.l(intf_11b[0]));
+	data_bucket #(.WIDTH(8), .BL(0)) db3(.l(intf[1]));
 endmodule
