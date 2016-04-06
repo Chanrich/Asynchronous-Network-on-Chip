@@ -13,7 +13,9 @@ module data_generator (interface r);
     //$display("Start module data_generator at time %d", $time);
     #DELAY;
     SendValue = $random() % (2**WIDTH);
-    //$display("########## DG=%m generated Value=%d", SendValue);
+    //if(SendValue == 3) //only used to test merge since a control value of 3 is invalid
+    	//SendValue = 0;
+    //$display("## DG=%m generated Value=%b", SendValue);
     #FL;
      
     //Communication action Send is about to start
@@ -43,7 +45,7 @@ module data_bucket (interface l);
     //timeOfReceive = $time;
     l.Receive(ReceiveValue);
     #BL;
-    $display("########## Value result is %d", ReceiveValue);
+    //$display("########## DB=%m received value=%b", ReceiveValue);
     //cycleCounter += 1;		
     //Measuring throughput: calculate the number of Receives per unit of time  
     //CycleTime stores the time it takes from the begining to the end of the always block
@@ -95,9 +97,11 @@ module bitSlicer(interface in, interface dataOut, interface addressOut);
 	begin
 		in.Receive(inData);
 		#FL;
-
-		data = inData[3:0];
-		address = inData[10:4];
+		//$display("********** Slicer inData=%b",inData);
+		address = inData[3:0];
+		data = inData[10:4];
+		//$display("********** Slicer hamming=%b",data);
+		//$display("********** Slicer address=%b",address);
 
 		fork
 		dataOut.Send(data);
@@ -116,13 +120,28 @@ module input_process_block(interface input1_to_merge, interface input2_to_merge,
 							interface addr_out, interface hamming_out);
 	// inputs take 11 bits
 	Channel #(.hsProtocol(P4PhaseBD), .WIDTH(11)) data_intf (); 
-	Channel #(.hsProtocol(P4PhaseBD), .WIDTH(2)) control_intf[3:0] (); 
 
 	// arbiter3 #(.WIDTH(11), .FL(2), .BL(2)) ar3(.in0(intf[5]), .in1(intf[7]), .in2(intf[9]), .out(intf[13]));
 	merge #(.WIDTH(11), .FL(0), .BL(0)) mg(.inPort0(input1_to_merge), .inPort1(input2_to_merge), .inPort2(core_data), .controlPort(merge_control), .outPort(data_intf));
 	bitSlicer #(.FL(0), .BL(0)) bs(.in(data_intf), .dataOut(hamming_out), .addressOut(addr_out));
 
 endmodule
+
+module input_process_block_tb;
+	
+	Channel #(.hsProtocol(P4PhaseBD), .WIDTH(11)) intf[3:0] ();
+	Channel #(.hsProtocol(P4PhaseBD), .WIDTH(7)) hammingOUT ();
+	Channel #(.hsProtocol(P4PhaseBD), .WIDTH(4)) addrOUT ();
+
+	data_generator #(.WIDTH(11), .FL(2), .DELAY(0)) dg0(.r(intf[0]));
+	data_generator #(.WIDTH(11), .FL(2), .DELAY(0)) dg1(.r(intf[1]));
+	data_generator #(.WIDTH(11), .FL(2), .DELAY(0)) dg2(.r(intf[2]));
+	data_generator #(.WIDTH(2), .FL(2), .DELAY(0)) dg_sel(.r(intf[3]));
+	input_process_block ipb(.input1_to_merge(intf[0]), .input2_to_merge(intf[1]), .core_data(intf[2]), .merge_control(intf[3]), .addr_out(addrOUT), .hamming_out(hammingOUT));
+	data_bucket #(.WIDTH(7), .BL(2)) db_ham(.l(hammingOUT));
+	data_bucket #(.WIDTH(4), .BL(2)) db_addr(.l(addrOUT));
+endmodule
+
 /*module arbiter2_tb;
 	logic [10:0] in0=0, in1=0;
 	wire [10:0] out;
