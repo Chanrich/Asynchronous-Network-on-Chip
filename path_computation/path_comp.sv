@@ -174,7 +174,8 @@ endmodule
 module path_computation_module (interface d_in, interface addr_in, interface d_out2core, interface d_out2router1, interface d_out2router2, interface d_out2router3, interface d_out2router4);
 
   parameter ADDR = 4'b0000;
-
+  logic [3:0] addr_store;
+  assign addr_store = ADDR;
   //Interface Vector instatiation: 4-phase bundled data channel
   Channel #(.WIDTH(7), .hsProtocol(P4PhaseBD)) data_intf  [1:0] (); 
   Channel #(.WIDTH(4), .hsProtocol(P4PhaseBD)) addr_intf  [1:0] (); 

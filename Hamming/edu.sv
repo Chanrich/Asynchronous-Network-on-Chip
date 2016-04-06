@@ -58,8 +58,8 @@ module data_bucket (interface r);
 endmodule
 
 module edu(interface datain, interface dataout);
-	parameter FL = 4;
-	parameter BL = 6;
+	parameter FL = 2;
+	parameter BL = 2;
 	logic [6:0] raw_data;
 	logic [2:0] parity_bit;
 	logic P1;
