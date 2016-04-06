@@ -166,7 +166,7 @@ module core_tb;
 	Channel #(.hsProtocol(P4PhaseBD), .WIDTH(2)) intf_2b (); 
 
 	data_generator #(.WIDTH(8), .FL(0), .DELAY(5)) dg1(.r(intf[0]));
-	data_generator #(.WIDTH(11), .FL(0), .DELAY(30)) dg2(.r(intf_11b[1]));
+	data_generator #(.WIDTH(11), .FL(0), .DELAY(5)) dg2(.r(intf_11b[1]));
 
 	core core (.dg_8b(intf[0]), .db_8b(intf[1]), .data_out_11b(intf_11b[0]), .data_control_out(intf_2b), .data_in_11b(intf_11b[1]));
 

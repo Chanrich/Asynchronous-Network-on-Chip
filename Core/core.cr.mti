@@ -1,4 +1,16 @@
-C:/Users/timet/Desktop/Asynchronous-Network-on-Chip/Core/SystemVerilogCSP.sv {1 {vlog -work work -sv -stats=none C:/Users/timet/Desktop/Asynchronous-Network-on-Chip/Core/SystemVerilogCSP.sv
+C:/Users/timet/Desktop/Asynchronous-Network-on-Chip/Core/core.sv {1 {vlog -work work -sv -stats=none C:/Users/timet/Desktop/Asynchronous-Network-on-Chip/Core/core.sv
+Model Technology ModelSim PE Student Edition vlog 10.4a Compiler 2015.03 Apr  7 2015
+-- Compiling package core_sv_unit
+-- Importing package SystemVerilogCSP
+-- Compiling module core
+-- Compiling module data_generator
+-- Compiling module data_bucket
+-- Compiling module core_tb
+
+Top level modules:
+	core_tb
+
+} {} {}} C:/Users/timet/Desktop/Asynchronous-Network-on-Chip/Core/SystemVerilogCSP.sv {1 {vlog -work work -sv -stats=none C:/Users/timet/Desktop/Asynchronous-Network-on-Chip/Core/SystemVerilogCSP.sv
 Model Technology ModelSim PE Student Edition vlog 10.4a Compiler 2015.03 Apr  7 2015
 -- Compiling package SystemVerilogCSP
 -- Compiling interface Channel
