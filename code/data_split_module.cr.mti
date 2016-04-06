@@ -1,0 +1,27 @@
+C:/Users/Danny/Desktop/ee552_final_project/code/data_split_module.sv {1 {vlog -work work -sv -stats=none C:/Users/Danny/Desktop/ee552_final_project/code/data_split_module.sv
+Model Technology ModelSim PE Student Edition vlog 10.4a Compiler 2015.03 Apr  7 2015
+-- Compiling package data_split_module_sv_unit
+-- Importing package SystemVerilogCSP
+-- Compiling module data_generator
+-- Compiling module data_bucket
+-- Compiling module arbiter2
+-- Compiling module arbiter3
+-- Compiling module merge
+-- Compiling module bitSlicer
+-- Compiling module data_splitter_tb
+
+Top level modules:
+	data_splitter_tb
+
+} {} {}} C:/Users/Danny/Desktop/ee552_final_project/code/SystemVerilogCSP.sv {1 {vlog -work work -sv -stats=none C:/Users/Danny/Desktop/ee552_final_project/code/SystemVerilogCSP.sv
+Model Technology ModelSim PE Student Edition vlog 10.4a Compiler 2015.03 Apr  7 2015
+-- Compiling package SystemVerilogCSP
+-- Compiling interface Channel
+-- Compiling package SystemVerilogCSP_sv_unit
+-- Importing package SystemVerilogCSP
+-- Compiling interface Channel
+
+Top level modules:
+	--none--
+
+} {} {}}
