@@ -1,4 +1,15 @@
-C:/Users/Richard/Documents/GitHub/Asynchronous-Network-on-Chip/Input_Processing_Unit/data_split_module.sv {1 {vlog -work work -vopt -sv C:/Users/Richard/Documents/GitHub/Asynchronous-Network-on-Chip/Input_Processing_Unit/data_split_module.sv
+C:/Users/Richard/Documents/GitHub/Asynchronous-Network-on-Chip/Node/SystemVerilogCSP.sv {1 {vlog -work work -vopt -sv C:/Users/Richard/Documents/GitHub/Asynchronous-Network-on-Chip/Node/SystemVerilogCSP.sv
+Model Technology ModelSim SE-64 vlog 10.2 Compiler 2013.02 Feb  2 2013
+-- Compiling package SystemVerilogCSP
+-- Compiling interface Channel
+-- Compiling package SystemVerilogCSP_sv_unit
+-- Importing package SystemVerilogCSP
+-- Compiling interface Channel
+
+Top level modules:
+	--none--
+
+} {} {}} C:/Users/Richard/Documents/GitHub/Asynchronous-Network-on-Chip/Input_Processing_Unit/data_split_module.sv {1 {vlog -work work -vopt -sv C:/Users/Richard/Documents/GitHub/Asynchronous-Network-on-Chip/Input_Processing_Unit/data_split_module.sv
 Model Technology ModelSim SE-64 vlog 10.2 Compiler 2013.02 Feb  2 2013
 -- Compiling package data_split_module_sv_unit
 -- Importing package SystemVerilogCSP
@@ -14,16 +25,20 @@ Top level modules:
 	input_process_block_tb
 	data_splitter_tb
 
-} {} {}} C:/Users/Richard/Documents/GitHub/Asynchronous-Network-on-Chip/Node/SystemVerilogCSP.sv {1 {vlog -work work -vopt -sv C:/Users/Richard/Documents/GitHub/Asynchronous-Network-on-Chip/Node/SystemVerilogCSP.sv
+} {} {}} C:/Users/Richard/Documents/GitHub/Asynchronous-Network-on-Chip/path_computation/path_comp.sv {1 {vlog -work work -vopt -sv C:/Users/Richard/Documents/GitHub/Asynchronous-Network-on-Chip/path_computation/path_comp.sv
 Model Technology ModelSim SE-64 vlog 10.2 Compiler 2013.02 Feb  2 2013
--- Compiling package SystemVerilogCSP
--- Compiling interface Channel
--- Compiling package SystemVerilogCSP_sv_unit
+-- Compiling package path_comp_sv_unit
 -- Importing package SystemVerilogCSP
--- Compiling interface Channel
+-- Compiling module split_4
+-- Compiling module split_2
+-- Compiling module check_position
+-- Compiling module two_input_xor
+-- Compiling module concatenate_module
+-- Compiling module path_computation_module
+-- Compiling module computation_module_tb
 
 Top level modules:
-	--none--
+	computation_module_tb
 
 } {} {}} C:/Users/Richard/Documents/GitHub/Asynchronous-Network-on-Chip/Core/core.sv {1 {vlog -work work -vopt -sv C:/Users/Richard/Documents/GitHub/Asynchronous-Network-on-Chip/Core/core.sv
 Model Technology ModelSim SE-64 vlog 10.2 Compiler 2013.02 Feb  2 2013
@@ -51,15 +66,16 @@ Model Technology ModelSim SE-64 vlog 10.2 Compiler 2013.02 Feb  2 2013
 Top level modules:
 	edu_tb
 
-} {} {}} C:/Users/Richard/Documents/GitHub/Asynchronous-Network-on-Chip/Node/node.sv {1 {vlog -work work -vopt -sv C:/Users/Richard/Documents/GitHub/Asynchronous-Network-on-Chip/Node/node.sv
+} {} {}} C:/Users/Richard/Documents/GitHub/Asynchronous-Network-on-Chip/Node/data.sv {1 {vlog -work work -vopt -sv C:/Users/Richard/Documents/GitHub/Asynchronous-Network-on-Chip/Node/data.sv
 Model Technology ModelSim SE-64 vlog 10.2 Compiler 2013.02 Feb  2 2013
--- Compiling package node_sv_unit
+-- Compiling package data_sv_unit
 -- Importing package SystemVerilogCSP
--- Compiling module node
--- Compiling module node_tb
+-- Compiling module data_generator
+-- Compiling module data_bucket
 
 Top level modules:
-	node_tb
+	data_generator
+	data_bucket
 
 } {} {}} C:/Users/Richard/Documents/GitHub/Asynchronous-Network-on-Chip/Arbiter/arbiter_block.sv {1 {vlog -work work -vopt -sv C:/Users/Richard/Documents/GitHub/Asynchronous-Network-on-Chip/Arbiter/arbiter_block.sv
 Model Technology ModelSim SE-64 vlog 10.2 Compiler 2013.02 Feb  2 2013
@@ -77,15 +93,14 @@ Model Technology ModelSim SE-64 vlog 10.2 Compiler 2013.02 Feb  2 2013
 Top level modules:
 	arbiter_tb
 
-} {} {}} C:/Users/Richard/Documents/GitHub/Asynchronous-Network-on-Chip/Node/data.sv {1 {vlog -work work -vopt -sv C:/Users/Richard/Documents/GitHub/Asynchronous-Network-on-Chip/Node/data.sv
+} {} {}} C:/Users/Richard/Documents/GitHub/Asynchronous-Network-on-Chip/Node/node.sv {1 {vlog -work work -vopt -sv C:/Users/Richard/Documents/GitHub/Asynchronous-Network-on-Chip/Node/node.sv
 Model Technology ModelSim SE-64 vlog 10.2 Compiler 2013.02 Feb  2 2013
--- Compiling package data_sv_unit
+-- Compiling package node_sv_unit
 -- Importing package SystemVerilogCSP
--- Compiling module data_generator
--- Compiling module data_bucket
+-- Compiling module node
+-- Compiling module node_tb
 
 Top level modules:
-	data_generator
-	data_bucket
+	node_tb
 
 } {} {}}

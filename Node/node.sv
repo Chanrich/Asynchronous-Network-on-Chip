@@ -53,6 +53,12 @@ module node_tb;
 	initial 
 	begin
 		data_generator_intf.Send(8'b11110010);
+		#40;
+		data_generator_intf.Send(8'b10100010);
+		#40;
+		data_generator_intf.Send(8'b10101110);
+		#100;
+		data_generator_intf.Send(8'b10100100);
 
 	end
 endmodule

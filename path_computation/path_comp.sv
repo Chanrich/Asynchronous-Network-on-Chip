@@ -35,8 +35,9 @@ module split_4 (interface inPort, interface controlPort, interface outPort1, int
     begin 
       outPort4.Send(data);
     end 
-  
+    
     #BL;  //Backward Latency: Delay from the time data is delivered to the time next input can be accepted
+    //$display("ending split_r***%m at %d",$time);
   end
 endmodule
 
@@ -89,7 +90,9 @@ module check_position(interface in, interface core_contr, interface router_contr
     //if data == current address then out_core = 1, else then out_core = 0 
 
     #FL;
-    if(data == ADDR)
+    // if(data == ADDR)
+    // if data == 0000, reached destination
+    if(data == 4'b0000)
       begin 
          out_core = 1;
          core_contr.Send(out_core);
