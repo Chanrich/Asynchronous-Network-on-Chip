@@ -4,8 +4,8 @@ import SystemVerilogCSP::*;
 
 module top (interface dg_in [15:0], interface db_out [15:0]);
 
-	Channel #(.WIDTH(11), .hsProtocol(P4PhaseBD)) data_intf_1  [22:0] (); 
-	Channel #(.WIDTH(11), .hsProtocol(P4PhaseBD)) data_intf_2  [22:0] (); 
+	Channel #(.WIDTH(11), .hsProtocol(P4PhaseBD)) data_intf_1  [23:0] (); 
+	Channel #(.WIDTH(11), .hsProtocol(P4PhaseBD)) data_intf_2  [23:0] (); 
 	Channel #(.WIDTH(11), .hsProtocol(P4PhaseBD)) data_intf_3  [15:0] (); 
 
 
@@ -18,10 +18,10 @@ module top (interface dg_in [15:0], interface db_out [15:0]);
 	 .db(db_out[1]), .dg(dg_in[1]));
 
 	node #(.MyIP(4'b0010)) n3  (.in1(data_intf_1[2]), .in2(data_intf_1[10]), .in3(data_intf_1[12]), .in4(data_intf_3[5]), 
-	 .out1(data_intf_1[9]), .out2(data_intf_1[3]), .out3(data_intf_1[11]), .out4(data_intf_3[4]),
+	 .out1(data_intf_1[23]), .out2(data_intf_1[3]), .out3(data_intf_1[11]), .out4(data_intf_3[4]),
 	 .db(db_out[2]), .dg(dg_in[2]));
 
-	node #(.MyIP(4'b0011)) n4  (.in1(data_intf_1[6]), .in2(data_intf_1[9]), .in3(data_intf_1[14]), .in4(data_intf_3[7]), 
+	node #(.MyIP(4'b0011)) n4  (.in1(data_intf_1[6]), .in2(data_intf_1[23]), .in3(data_intf_1[14]), .in4(data_intf_3[7]), 
 	 .out1(data_intf_1[10]), .out2(data_intf_1[7]), .out3(data_intf_1[13]), .out4(data_intf_3[6]),
 	 .db(db_out[3]), .dg(dg_in[3]));
 
@@ -50,10 +50,10 @@ module top (interface dg_in [15:0], interface db_out [15:0]);
 	 .db(db_out[9]), .dg(dg_in[9]));
 
 	node #(.MyIP(4'b1010)) n11  (.in1(data_intf_2[2]), .in2(data_intf_2[10]), .in3(data_intf_2[12]), .in4(data_intf_3[4]), 
-	 .out1(data_intf_2[9]), .out2(data_intf_2[3]), .out3(data_intf_2[11]), .out4(data_intf_3[5]),
+	 .out1(data_intf_2[23]), .out2(data_intf_2[3]), .out3(data_intf_2[11]), .out4(data_intf_3[5]),
 	 .db(db_out[10]), .dg(dg_in[10]));
 
-	node #(.MyIP(4'b1011)) n12  (.in1(data_intf_2[6]), .in2(data_intf_2[9]), .in3(data_intf_2[14]), .in4(data_intf_3[6]), 
+	node #(.MyIP(4'b1011)) n12  (.in1(data_intf_2[6]), .in2(data_intf_2[23]), .in3(data_intf_2[14]), .in4(data_intf_3[6]), 
 	 .out1(data_intf_2[10]), .out2(data_intf_2[7]), .out3(data_intf_2[13]), .out4(data_intf_3[7]),
 	 .db(db_out[11]), .dg(dg_in[11]));
 

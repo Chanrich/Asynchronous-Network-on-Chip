@@ -1,6 +1,7 @@
 `timescale 1ns/1fs
 //NOTE: you need to compile SystemVerilogCSP.sv as well
 import SystemVerilogCSP::*;
+`define test_count 50
 
 module data_generator (interface data_out, interface control);
   parameter WIDTH = 8;
@@ -8,36 +9,45 @@ module data_generator (interface data_out, interface control);
   logic [3:0] addr;
   logic [3:0] starting_addr;
   logic [3:0] data;
+  logic [9:0] counter;
   logic [WIDTH-1:0] SendValue=0;
+
+  initial begin
+    counter = 0;
+  end
 
   always
   begin 
     //add a display here to see when this module starts its main loop
     //$display("Start module data_generator and time is %d", $time);
-    
-    addr = $random() % (2**4);
-    data = $random() % (2**4);
-    SendValue = {data,addr};
+    if (counter < `test_count) begin
+      addr = $random() % (2**4);
+      data = $random() % (2**4);
+      SendValue = {data,addr};
 
-    //starting_addr = $random() % (2**4);
-    starting_addr = addr; 
-    while(starting_addr == addr)
-    begin
-      $display("in while loop");
-      starting_addr = $random() % (2**4);
+      //starting_addr = $random() % (2**4);
+      starting_addr = addr; 
+      while(starting_addr == addr)
+      begin
+        //$display("in while loop");
+        starting_addr = $random() % (2**4);
+      end
+      #FL;
+
+      
+      //$display("data generator is sending %b",SendValue);
+       
+      //Communication action Send is about to start
+     // $display("Starting %m.Send @ %d", $time);
+      fork 
+        tb_module.original.push_back(SendValue);
+        data_out.Send(SendValue);
+        control.Send(starting_addr);
+      join
+      counter = counter + 1;
+      $display("Start module data_gen and time is %d, Send count: %d", $time, counter); 
     end
-
-    #FL;
-    
-    //$display("data generator is sending %b",SendValue);
-     
-    //Communication action Send is about to start
-   // $display("Starting %m.Send @ %d", $time);
-    fork 
-    tb_module.original.push_back(SendValue);
-    data_out.Send(SendValue);
-    control.Send(starting_addr);
-    join
+    #10;
     //Communication action Send is finished
    // $display("Finished %m.Send @ %d", $time);
   end
@@ -47,34 +57,24 @@ endmodule
 module data_bucket (interface r);
   parameter WIDTH = 8;
   parameter BL = 0; //ideal environment
+  parameter MYID = 0;
   logic [WIDTH-1:0] ReceiveValue = 0;
-  
   //Variables added for performance measurements
   /*real cycleCounter=0, //# of cycles = Total number of times a value is received
        timeOfReceive=0, //Simulation time of the latest Receive 
        cycleTime=0; // time difference between the last two receives
   real averageThroughput=0, averageCycleTime=0, sumOfCycleTimes=0;*/
+
   always
   begin
-	$display("Start module data_bucket and time is %d", $time);	
-    //Save the simulation time when Receive starts
-    //timeOfReceive = $time;
-    r.Receive(ReceiveValue);
-    tb_module.result.push_back(ReceiveValue);
-    
-    $display("data bucket is receiving %b",ReceiveValue);
-    #BL;
-   /* cycleCounter += 1;		
-    //Measuring throughput: calculate the number of Receives per unit of time  
-    //CycleTime stores the time it takes from the begining to the end of the always block
-    cycleTime = $time - timeOfReceive;
-    averageThroughput = cycleCounter/$time;
-    sumOfCycleTimes += cycleTime;
-    averageCycleTime = sumOfCycleTimes / cycleCounter;*/
-    //$display("Execution cycle= %d, Cycle Time= %d, 
-   // Average CycleTime=%f, Average Throughput=%f", cycleCounter, cycleTime, 
-   // averageCycleTime, averageThroughput);
-	// $display("End module data_bucket and time is %d", $time);
+      $display("Start module data_bucket and time is %d", $time);	
+      //Save the simulation time when Receive starts
+      //timeOfReceive = $time;
+      r.Receive(ReceiveValue);
+      tb_module.result.push_back(ReceiveValue);
+      tb_module.receive_count = tb_module.receive_count + 1;
+      $display("Data bucket [%d] is receiving %b", MYID, ReceiveValue);
+      #BL;
   end
 endmodule
 
@@ -135,6 +135,9 @@ module tb_module;
   reg [7:0] result [$];
   reg [7:0] original_data;
   reg [7:0] result_data;
+  int queue_check[$];
+  integer receive_count;
+  integer check_count;
   integer fp_result;
   integer fp_original;
 
@@ -146,78 +149,83 @@ module tb_module;
 
   data_generator dg(data_intf[0], control_intf[0]);
   split spdg(data_intf[0], control_intf[0], intf2core[15:0]);
+  top top1 (.dg_in(intf2core[15:0]), .db_out(db_intf[15:0]));
+  data_bucket #(.MYID(0)) db0000(db_intf[0]);
+  data_bucket #(.MYID(1)) db0001(db_intf[1]);
+  data_bucket #(.MYID(2)) db0010(db_intf[2]);
+  data_bucket #(.MYID(3)) db0011(db_intf[3]);
+  data_bucket #(.MYID(4)) db0100(db_intf[4]);
+  data_bucket #(.MYID(5)) db0101(db_intf[5]);
+  data_bucket #(.MYID(6)) db0110(db_intf[6]);
+  data_bucket #(.MYID(7)) db0111(db_intf[7]);
 
-  data_bucket db0000(db_intf[0]);
-  data_bucket db0001(db_intf[1]);
-  data_bucket db0010(db_intf[2]);
-  data_bucket db0011(db_intf[3]);
-  data_bucket db0100(db_intf[4]);
-  data_bucket db0101(db_intf[5]);
-  data_bucket db0110(db_intf[6]);
-  data_bucket db0111(db_intf[7]);
-
-  data_bucket db1000(db_intf[8]);
-  data_bucket db1001(db_intf[9]);
-  data_bucket db1010(db_intf[10]);
-  data_bucket db1011(db_intf[11]);
-  data_bucket db1100(db_intf[12]);
-  data_bucket db1101(db_intf[13]);
-  data_bucket db1110(db_intf[14]);
-  data_bucket db1111(db_intf[15]);
+  data_bucket #(.MYID(8)) db1000(db_intf[8]);
+  data_bucket #(.MYID(9)) db1001(db_intf[9]);
+  data_bucket #(.MYID(10)) db1010(db_intf[10]);
+  data_bucket #(.MYID(11)) db1011(db_intf[11]);
+  data_bucket #(.MYID(12)) db1100(db_intf[12]);
+  data_bucket #(.MYID(13)) db1101(db_intf[13]);
+  data_bucket #(.MYID(14)) db1110(db_intf[14]);
+  data_bucket #(.MYID(15)) db1111(db_intf[15]);
 
 
 initial 
   begin 
-    #10
+    receive_count = 0;
+    check_count = 0;
+    #10;
+    $display("Waiting for receivers");
+    wait (receive_count == `test_count);
+    $display("Received: %d",receive_count);
+    // for(i = 0; i<10; i++)
+    // begin 
+    //   case (spdg.control)
+    //   4'b0000: intf2core[0].Receive(data); 
+    //   4'b0001: intf2core[1].Receive(data); 
+    //   4'b0010: intf2core[2].Receive(data); 
+    //   4'b0011: intf2core[3].Receive(data); 
+    //   4'b0100: intf2core[4].Receive(data); 
+    //   4'b0101: intf2core[5].Receive(data); 
+    //   4'b0110: intf2core[6].Receive(data); 
+    //   4'b0111: intf2core[7].Receive(data); 
+    //   4'b1000: intf2core[8].Receive(data); 
+    //   4'b1001: intf2core[9].Receive(data); 
+    //   4'b1010: intf2core[10].Receive(data); 
+    //   4'b1011: intf2core[11].Receive(data); 
+    //   4'b1100: intf2core[12].Receive(data); 
+    //   4'b1101: intf2core[13].Receive(data); 
+    //   4'b1110: intf2core[14].Receive(data); 
+    //   4'b1111: intf2core[15].Receive(data); 
+    //   endcase
 
-    for(i = 0; i<10; i++)
-    begin 
+    //   $display("data is %b and control is %b",data,spdg.control);
 
-      case (spdg.control)
-      4'b0000: intf2core[0].Receive(data); 
-      4'b0001: intf2core[1].Receive(data); 
-      4'b0010: intf2core[2].Receive(data); 
-      4'b0011: intf2core[3].Receive(data); 
-      4'b0100: intf2core[4].Receive(data); 
-      4'b0101: intf2core[5].Receive(data); 
-      4'b0110: intf2core[6].Receive(data); 
-      4'b0111: intf2core[7].Receive(data); 
-      4'b1000: intf2core[8].Receive(data); 
-      4'b1001: intf2core[9].Receive(data); 
-      4'b1010: intf2core[10].Receive(data); 
-      4'b1011: intf2core[11].Receive(data); 
-      4'b1100: intf2core[12].Receive(data); 
-      4'b1101: intf2core[13].Receive(data); 
-      4'b1110: intf2core[14].Receive(data); 
-      4'b1111: intf2core[15].Receive(data); 
-      endcase
+    //   //#20;
+    // end
 
-      $display("data is %b and control is %b",data,spdg.control);
-
-      //#20;
-    end
-
-    fp_original = $fopen("original_output.txt","a");
-    fp_result = $fopen("result_output.txt","a");
-
+    fp_result = $fopen("result_output.txt","w");
 
     result_size = result.size();
     while(result.size()!=0)
     begin 
+      check_count = check_count + 1;
+      $display("Checking %d in the queue", check_count);
       result_data = result.pop_front();
+      queue_check = original.find_first_index(x) with ( x == result_data);
+      $display("at index %d\n\tOriginal: %b, Result: %b", queue_check[0], original[queue_check[0]], result_data);
+      if (original[queue_check[0]] == result_data) begin
+        $display("matched, remove the item from original");
+        original.delete(queue_check[0]);
+      end
       $fwrite(fp_result,"%b\n",result_data);
-      $display("result data = %b",result_data);
     end
     $fclose(fp_result); 
-
-    while(result_size!=0)
-    begin 
-      original_data = original.pop_front();
-      $fwrite(fp_original,"%b\n",original_data);
-      $display("original data = %b",original_data);
-      result_size--;
+    $display("Original queue has %d elements left", original.size() );
+    if (original.size() != 0) begin
+      $display("Not matched");
+    end else begin
+      $display("Matched");
     end
-    $fclose(fp_original); 
 
   end 
 
