@@ -1,4 +1,20 @@
-C:/Users/timet/Desktop/Asynchronous-Network-on-Chip/Arbiter/SystemVerilogCSP.sv {1 {vlog -work work -sv -stats=none C:/Users/timet/Desktop/Asynchronous-Network-on-Chip/Arbiter/SystemVerilogCSP.sv
+C:/Users/timet/Desktop/Asynchronous-Network-on-Chip/Arbiter/arbiter_block.sv {1 {vlog -work work -sv -stats=none C:/Users/timet/Desktop/Asynchronous-Network-on-Chip/Arbiter/arbiter_block.sv
+Model Technology ModelSim PE Student Edition vlog 10.4a Compiler 2015.03 Apr  7 2015
+-- Compiling package arbiter_block_sv_unit
+-- Importing package SystemVerilogCSP
+-- Compiling module arbiter2
+-- Compiling module arbiter2_no_data
+-- Compiling module plain_buffer
+-- Compiling module input_arbiter_block
+-- Compiling module data_generator
+-- Compiling module data2_generator
+-- Compiling module data_bucket
+-- Compiling module arbiter_tb
+
+Top level modules:
+	arbiter_tb
+
+} {} {}} C:/Users/timet/Desktop/Asynchronous-Network-on-Chip/Arbiter/SystemVerilogCSP.sv {1 {vlog -work work -sv -stats=none C:/Users/timet/Desktop/Asynchronous-Network-on-Chip/Arbiter/SystemVerilogCSP.sv
 Model Technology ModelSim PE Student Edition vlog 10.4a Compiler 2015.03 Apr  7 2015
 -- Compiling package SystemVerilogCSP
 -- Compiling interface Channel
