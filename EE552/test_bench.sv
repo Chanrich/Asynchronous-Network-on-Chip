@@ -1,7 +1,7 @@
 `timescale 1ns/1fs
 //NOTE: you need to compile SystemVerilogCSP.sv as well
 import SystemVerilogCSP::*;
-`define test_count 50
+`define test_count 2000
 
 module data_generator (interface data_out, interface control);
   parameter WIDTH = 8;
@@ -9,7 +9,7 @@ module data_generator (interface data_out, interface control);
   logic [3:0] addr;
   logic [3:0] starting_addr;
   logic [3:0] data;
-  logic [9:0] counter;
+  logic [15:0] counter;
   logic [WIDTH-1:0] SendValue=0;
 
   initial begin
@@ -45,7 +45,7 @@ module data_generator (interface data_out, interface control);
         control.Send(starting_addr);
       join
       counter = counter + 1;
-      $display("Start module data_gen and time is %d, Send count: %d", $time, counter); 
+      //$display("Start module data_gen and time is %d, Send count: %d", $time, counter); 
     end
     #10;
     //Communication action Send is finished
@@ -60,26 +60,20 @@ module data_bucket (interface r);
   parameter MYID = 0;
   logic [WIDTH-1:0] ReceiveValue = 0;
   //Variables added for performance measurements
-  real timeOfReceive=0, //Simulation time of the latest Receive 
+  /*real cycleCounter=0, //# of cycles = Total number of times a value is received
+       timeOfReceive=0, //Simulation time of the latest Receive 
        cycleTime=0; // time difference between the last two receives
-  real averageCycleTime=0, sumOfCycleTimes=0;
+  real averageThroughput=0, averageCycleTime=0, sumOfCycleTimes=0;*/
 
   always
   begin
-      $display("Start module data_bucket and time is %d", $time);	
+      //$display("Start module data_bucket and time is %d", $time);	
       //Save the simulation time when Receive starts
-      timeOfReceive = $time;
+      //timeOfReceive = $time;
       r.Receive(ReceiveValue);
-      // New data, increment counter in tb_module
-      tb_module.receive_count +=  1;
-      // Push back result for verification
       tb_module.result.push_back(ReceiveValue);
-
-      cycleTime = $time - timeOfReceive;
-      tb_module.sum_of_cycles += cycleTime;
-      averageCycleTime = tb_module.sum_of_cycles / tb_module.receive_count;
-      $display("Data bucket [%d] is receiving %b", MYID, ReceiveValue);
-      $display("Average cycle time is:%f", averageCycleTime);
+      tb_module.receive_count = tb_module.receive_count + 1;
+      //$display("Data bucket [%d] is receiving %b | Receive count: %d", MYID, ReceiveValue, tb_module.receive_count);
       #BL;
   end
 endmodule
@@ -137,16 +131,14 @@ module tb_module;
   logic [3:0] control; 
   int i;
   int result_size;
-  reg [7:0] original [$];
-  reg [7:0] result [$];
-  reg [7:0] original_data;
+  reg [15:0] original [$];
+  reg [15:0] result [$];
   reg [7:0] result_data;
   int queue_check[$];
   integer receive_count;
   integer check_count;
   integer fp_result;
   integer fp_original;
-  integer sum_of_cycles;
 
 
   Channel #(.WIDTH(8), .hsProtocol(P4PhaseBD)) data_intf  [1:0] (); 
@@ -180,7 +172,6 @@ initial
   begin 
     receive_count = 0;
     check_count = 0;
-    sum_of_cycles = 0;
     #10;
     $display("Waiting for receivers");
     wait (receive_count == `test_count);
@@ -232,7 +223,7 @@ initial
     if (original.size() != 0) begin
       $display("Not matched");
     end else begin
-      $display("Matched");
+      $display("############  Matched  ###########");
     end
 
   end 
