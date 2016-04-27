@@ -1,7 +1,7 @@
 `timescale 1ns/100ps
 import SystemVerilogCSP::*;
 
-module core (interface dg_8b, interface db_8b, interface data_out_11b, interface data_control_out, interface data_in_11b);
+module core (interface dg_8b, interface db_8b, interface data_out_11b, interface data_in_11b);
     parameter FL = 2;
 	parameter BL = 2;  
 	logic select=0;
@@ -9,7 +9,6 @@ module core (interface dg_8b, interface db_8b, interface data_out_11b, interface
 	logic [7:0] dg_data;
 	logic [7:0] db_data;
 	logic [10:0] output_data;
-	logic [1:0] control = 2;
 	logic [6:0] raw_data;
 	
 	task automatic calc_parity(input [7:0] data, output [10:0] data_out);
@@ -73,10 +72,7 @@ module core (interface dg_8b, interface db_8b, interface data_out_11b, interface
 				calc_parity(dg_data, output_data);
 				#FL;
 
-				fork
-					data_out_11b.Send(output_data);
-					data_control_out.Send(control);
-				join
+				data_out_11b.Send(output_data);
 
 				#BL;
 			end
@@ -107,10 +103,8 @@ module core (interface dg_8b, interface db_8b, interface data_out_11b, interface
 				calc_parity(dg_data, output_data);
 				#FL;
 
-				fork
+
 					data_out_11b.Send(output_data);
-					data_control_out.Send(control);
-				join
 
 				#BL;
 		end

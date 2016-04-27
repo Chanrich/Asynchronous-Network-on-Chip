@@ -2,14 +2,15 @@
 //NOTE: you need to compile SystemVerilogCSP.sv as well
 import SystemVerilogCSP::*;
 `define test_count 2000
-
-module data_generator (interface data_out, interface control);
+`define send_count 10
+module data_generator (interface data_out);
   parameter WIDTH = 8;
   parameter FL = 0; //ideal environment
+  parameter MYID = 0;
   logic [3:0] addr;
-  logic [3:0] starting_addr;
+  //logic [3:0] starting_addr;
   logic [3:0] data;
-  logic [15:0] counter;
+  logic [16:0] counter;
   logic [WIDTH-1:0] SendValue=0;
 
   initial begin
@@ -20,32 +21,28 @@ module data_generator (interface data_out, interface control);
   begin 
     //add a display here to see when this module starts its main loop
     //$display("Start module data_generator and time is %d", $time);
-    if (counter < `test_count) begin
+    if (counter < `send_count) begin
       addr = $random() % (2**4);
       data = $random() % (2**4);
-      SendValue = {data,addr};
 
       //starting_addr = $random() % (2**4);
-      starting_addr = addr; 
-      while(starting_addr == addr)
+      //starting_addr = addr; 
+      while(MYID == addr)
       begin
         //$display("in while loop");
-        starting_addr = $random() % (2**4);
+        addr = $random() % (2**4);
       end
       #FL;
 
-      
+      SendValue = {data,addr};
       //$display("data generator is sending %b",SendValue);
        
       //Communication action Send is about to start
      // $display("Starting %m.Send @ %d", $time);
-      fork 
-        tb_module.original.push_back(SendValue);
-        data_out.Send(SendValue);
-        control.Send(starting_addr);
-      join
-      counter = counter + 1;
-      //$display("Start module data_gen and time is %d, Send count: %d", $time, counter); 
+      data_out.Send(SendValue);
+      tb_module.original.push_back(SendValue);
+      tb_module.total_send += 1;
+      $display("Start module data_gen and time is %d, Send count: %d", $time, tb_module.total_send); 
     end
     #10;
     //Communication action Send is finished
@@ -73,7 +70,7 @@ module data_bucket (interface r);
       r.Receive(ReceiveValue);
       tb_module.result.push_back(ReceiveValue);
       tb_module.receive_count = tb_module.receive_count + 1;
-      //$display("Data bucket [%d] is receiving %b | Receive count: %d", MYID, ReceiveValue, tb_module.receive_count);
+      $display("Data bucket [%d] is receiving %b | Receive count: %d", MYID, ReceiveValue, tb_module.receive_count);
       #BL;
   end
 endmodule
@@ -136,6 +133,7 @@ module tb_module;
   reg [7:0] result_data;
   int queue_check[$];
   integer receive_count;
+  integer total_send;
   integer check_count;
   integer fp_result;
   integer fp_original;
@@ -146,8 +144,26 @@ module tb_module;
   Channel #(.WIDTH(8), .hsProtocol(P4PhaseBD)) intf2core  [15:0] (); 
   Channel #(.WIDTH(8), .hsProtocol(P4PhaseBD)) db_intf[15:0]  (); 
 
-  data_generator dg(data_intf[0], control_intf[0]);
-  split spdg(data_intf[0], control_intf[0], intf2core[15:0]);
+
+
+  data_generator #(.MYID(0)) dg0(intf2core[0]);
+  data_generator #(.MYID(1)) dg1(intf2core[1]);
+  data_generator #(.MYID(2)) dg2(intf2core[2]);
+  data_generator #(.MYID(3)) dg3(intf2core[3]);
+  data_generator #(.MYID(4)) dg4(intf2core[4]);
+  data_generator #(.MYID(5)) dg5(intf2core[5]);
+  data_generator #(.MYID(6)) dg6(intf2core[6]);
+  data_generator #(.MYID(7)) dg7(intf2core[7]);
+  data_generator #(.MYID(8)) dg8(intf2core[8]);
+  data_generator #(.MYID(9)) dg9(intf2core[9]);
+  data_generator #(.MYID(10)) dg10(intf2core[10]);
+  data_generator #(.MYID(11)) dg11(intf2core[11]);
+  data_generator #(.MYID(12)) dg12(intf2core[12]);
+  data_generator #(.MYID(13)) dg13(intf2core[13]);
+  data_generator #(.MYID(14)) dg14(intf2core[14]);
+  data_generator #(.MYID(15)) dg15(intf2core[15]);
+
+
   top top1 (.dg_in(intf2core[15:0]), .db_out(db_intf[15:0]));
   data_bucket #(.MYID(0)) db0000(db_intf[0]);
   data_bucket #(.MYID(1)) db0001(db_intf[1]);
@@ -172,9 +188,10 @@ initial
   begin 
     receive_count = 0;
     check_count = 0;
+    total_send = 0;
     #10;
     $display("Waiting for receivers");
-    wait (receive_count == `test_count);
+    wait (receive_count == total_send);
     $display("Received: %d",receive_count);
     // for(i = 0; i<10; i++)
     // begin 
