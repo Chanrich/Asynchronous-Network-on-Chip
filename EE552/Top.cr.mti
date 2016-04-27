@@ -1,0 +1,97 @@
+/home/scf-27/chanrich/EE552/core.sv {1 {vlog -work work -vopt -sv -nocovercells /home/scf-27/chanrich/EE552/core.sv
+Model Technology ModelSim SE vlog 10.0b Compiler 2011.05 May  5 2011
+-- Compiling package core_sv_unit
+-- Importing package SystemVerilogCSP
+-- Compiling module core
+
+Top level modules:
+	core
+
+} {} {}} /home/scf-27/chanrich/EE552/node.sv {1 {vlog -work work -vopt -sv -nocovercells /home/scf-27/chanrich/EE552/node.sv
+Model Technology ModelSim SE vlog 10.0b Compiler 2011.05 May  5 2011
+-- Compiling package node_sv_unit
+-- Importing package SystemVerilogCSP
+-- Compiling module node
+
+Top level modules:
+	node
+
+} {} {}} /home/scf-27/chanrich/EE552/edu.sv {2 {vlog -work work -vopt -sv -nocovercells /home/scf-27/chanrich/EE552/edu.sv
+Model Technology ModelSim SE vlog 10.0b Compiler 2011.05 May  5 2011
+** Warning: /home/scf-27/chanrich/EE552/edu.sv(52): (vlog-2643) Unterminated string literal continues onto next line.
+-- Compiling package edu_sv_unit
+-- Importing package SystemVerilogCSP
+-- Compiling module data_generator
+-- Compiling module data_bucket
+-- Compiling module edu
+-- Compiling module edu_tb
+
+Top level modules:
+	edu_tb
+
+} {} {}} /home/scf-27/chanrich/EE552/data_split_module.sv {1 {vlog -work work -vopt -sv -nocovercells /home/scf-27/chanrich/EE552/data_split_module.sv
+Model Technology ModelSim SE vlog 10.0b Compiler 2011.05 May  5 2011
+-- Compiling package data_split_module_sv_unit
+-- Importing package SystemVerilogCSP
+-- Compiling module data_generator
+-- Compiling module data_bucket
+-- Compiling module merge
+-- Compiling module bitSlicer
+-- Compiling module input_process_block
+-- Compiling module input_process_block_tb
+-- Compiling module data_splitter_tb
+
+Top level modules:
+	input_process_block_tb
+	data_splitter_tb
+
+} {} {}} /home/scf-27/chanrich/EE552/top.sv {1 {vlog -work work -vopt -sv -nocovercells /home/scf-27/chanrich/EE552/top.sv
+Model Technology ModelSim SE vlog 10.0b Compiler 2011.05 May  5 2011
+-- Compiling package top_sv_unit
+-- Importing package SystemVerilogCSP
+-- Compiling module top
+-- Compiling module data_bucket_top_tb
+-- Compiling module top_tb
+
+Top level modules:
+	top_tb
+
+} {} {}} /home/scf-27/chanrich/EE552/SystemVerilogCSP.sv {1 {vlog -work work -vopt -sv -nocovercells /home/scf-27/chanrich/EE552/SystemVerilogCSP.sv
+Model Technology ModelSim SE vlog 10.0b Compiler 2011.05 May  5 2011
+-- Compiling package SystemVerilogCSP
+-- Compiling interface Channel
+-- Compiling package SystemVerilogCSP_sv_unit
+-- Importing package SystemVerilogCSP
+-- Compiling interface Channel
+
+Top level modules:
+	--none--
+
+} {} {}} /home/scf-27/chanrich/EE552/path_comp.sv {1 {vlog -work work -vopt -sv -nocovercells /home/scf-27/chanrich/EE552/path_comp.sv
+Model Technology ModelSim SE vlog 10.0b Compiler 2011.05 May  5 2011
+-- Compiling package path_comp_sv_unit
+-- Importing package SystemVerilogCSP
+-- Compiling module split_4
+-- Compiling module split_2
+-- Compiling module check_position
+-- Compiling module two_input_xor
+-- Compiling module concatenate_module
+-- Compiling module path_computation_module
+-- Compiling module computation_module_tb
+
+Top level modules:
+	computation_module_tb
+
+} {} {}} /home/scf-27/chanrich/EE552/arbiter_block.sv {1 {vlog -work work -vopt -sv -nocovercells /home/scf-27/chanrich/EE552/arbiter_block.sv
+Model Technology ModelSim SE vlog 10.0b Compiler 2011.05 May  5 2011
+-- Compiling package arbiter_block_sv_unit
+-- Importing package SystemVerilogCSP
+-- Compiling module arbiter2
+-- Compiling module arbiter2_no_data
+-- Compiling module plain_buffer
+-- Compiling module input_arbiter_block
+
+Top level modules:
+	input_arbiter_block
+
+} {} {}}

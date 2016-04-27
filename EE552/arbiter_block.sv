@@ -41,7 +41,6 @@ module arbiter2 (interface in0, interface in1, interface out, interface ctr);
 		begin
 				in0.Receive(data);
 				#FL;
-				$display("data=%b",data);
 				fork
 				out.Send(data);
 				ctr.Send(control);
