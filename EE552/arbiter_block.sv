@@ -96,11 +96,11 @@ module input_arbiter_block(interface in1, interface in2, interface in3, interfac
 	// inputs take 11 bits
 	Channel #(.hsProtocol(P4PhaseBD), .WIDTH(11)) data_intf[2:0] (); 
 
-	arbiter2 #(.FL(2), .BL(2)) ar1(.in0(in1), .in1(in2), .out(data_intf[0]));
-	arbiter2 #(.FL(2), .BL(2)) ar2(.in0(in3), .in1(in4), .out(data_intf[2]));
+	arbiter2 #(.FL(0), .BL(0)) ar1(.in0(in1), .in1(in2), .out(data_intf[0]));
+	arbiter2 #(.FL(0), .BL(0)) ar2(.in0(in3), .in1(in4), .out(data_intf[2]));
 
-	arbiter2 #(.FL(2), .BL(2)) ar3(.in0(data_intf[0]), .in1(data_intf[2]), .out(data_intf[1]));
-	arbiter2 #(.FL(2), .BL(2)) ar4(.in0(data_intf[1]), .in1(core_data), .out(data_out));
+	arbiter2 #(.FL(0), .BL(0)) ar3(.in0(data_intf[0]), .in1(data_intf[2]), .out(data_intf[1]));
+	arbiter2 #(.FL(0), .BL(0)) ar4(.in0(data_intf[1]), .in1(core_data), .out(data_out));
 
 endmodule
 

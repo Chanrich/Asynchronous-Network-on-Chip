@@ -2,7 +2,7 @@
 //NOTE: you need to compile SystemVerilogCSP.sv as well
 import SystemVerilogCSP::*;
 `define test_count 2000
-`define send_count 5
+`define send_count 10
 module data_generator (interface data_out);
   parameter WIDTH = 8;
   parameter FL = 0; //ideal environment
