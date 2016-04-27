@@ -59,72 +59,36 @@ module core (interface dg_8b, interface db_8b, interface data_out_11b, interface
 		end
 	endtask
 
-	always begin
-		wait((dg_8b.status != idle) || (data_in_11b.status != idle)); //wait until 1 of the input ports has a token
-		if((dg_8b.status != idle) && (data_in_11b.status != idle)) //if both ports have tokens
+	always 
 		begin
-			if(select == 0)
-			begin
-				// Select is 0, get 8-bit data from the data generator 
-				dg_8b.Receive(dg_data);
+			dg_8b.Receive(dg_data);
 
-				// Calculate and combine parity bits in output
-				calc_parity(dg_data, output_data);
-				#FL;
+			// Calculate and combine parity bits in output
+			calc_parity(dg_data, output_data);
+			#FL;
 
-				data_out_11b.Send(output_data);
+			data_out_11b.Send(output_data);
 
-				#BL;
-			end
-			else if(select == 1)
-			begin
-				// Select bit is 1, get 11-bit data from router
-				data_in_11b.Receive(router_data);
-				raw_data = router_data[10:4];
-
-				hamming_fix(raw_data);
-
-
-				// Put fixed data into data bucket with 8-bits format: | 4-bit IP | 4-bit Data |
-				db_data[3:0] = router_data[3:0];
-				db_data[7:4] = {raw_data[6], raw_data[5], raw_data[4], raw_data[2]};
-
-				#FL;
-				db_8b.Send(db_data);
-				#BL;
-			end
-			select = ~select;
-		end
-		else if(dg_8b.status != idle) //if input0 has token ready
-		begin
-				dg_8b.Receive(dg_data);
-
-				// Calculate and combine parity bits in output
-				calc_parity(dg_data, output_data);
-				#FL;
-
-
-					data_out_11b.Send(output_data);
-
-				#BL;
-		end
-		else if(data_in_11b.status != idle) //if input1 has token ready
-		begin
-				data_in_11b.Receive(router_data);
-				raw_data = router_data[10:4];
-				
-				hamming_fix(raw_data);
-
-
-				// Put fixed data into data bucket with 8-bits format: | 4-bit IP | 4-bit Data |
-				db_data[3:0] = router_data[3:0];
-				db_data[7:4] = {raw_data[6], raw_data[5], raw_data[4], raw_data[2]};
-
-				#FL;
-				db_8b.Send(db_data);
-				#BL;
+			#BL;
 		end
 
-	end
+
+	always
+		begin
+			// Select bit is 1, get 11-bit data from router
+			data_in_11b.Receive(router_data);
+			raw_data = router_data[10:4];
+
+			hamming_fix(raw_data);
+
+
+			// Put fixed data into data bucket with 8-bits format: | 4-bit IP | 4-bit Data |
+			db_data[3:0] = router_data[3:0];
+			db_data[7:4] = {raw_data[6], raw_data[5], raw_data[4], raw_data[2]};
+
+			#FL;
+			db_8b.Send(db_data);
+			#BL;
+		end
 endmodule
 

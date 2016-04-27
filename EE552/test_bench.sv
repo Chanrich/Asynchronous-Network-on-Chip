@@ -2,7 +2,7 @@
 //NOTE: you need to compile SystemVerilogCSP.sv as well
 import SystemVerilogCSP::*;
 `define test_count 2000
-`define send_count 10
+`define send_count 5
 module data_generator (interface data_out);
   parameter WIDTH = 8;
   parameter FL = 0; //ideal environment
@@ -43,6 +43,7 @@ module data_generator (interface data_out);
       tb_module.original.push_back(SendValue);
       tb_module.total_send += 1;
       $display("Start module data_gen and time is %d, Send count: %d", $time, tb_module.total_send); 
+      counter += 1;
     end
     #10;
     //Communication action Send is finished
