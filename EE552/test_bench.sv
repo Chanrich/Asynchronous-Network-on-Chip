@@ -68,7 +68,7 @@ module data_bucket (interface r);
       tb_module.receive_count = tb_module.receive_count + 1;
       // Global Cycle Count
       tb_module.cycle_queue[MYID] += 1;
-      tb_module.throughput[MYID] = tb_module.cycle_queue[MYID] / $time;
+      tb_module.throughput[MYID] = tb_module.cycle_queue[MYID] / tb_module.sum_travel_time[MYID];
 
       // Check the receive data if it matched
       queue_check = tb_module.data_queue[MYID].find_first_index(x) with ( x == ReceiveValue);
