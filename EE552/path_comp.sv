@@ -8,6 +8,7 @@ module big_split (interface inPort, interface controlPort, interface core_output
   parameter FL = 1;
   parameter BL = 1;
   parameter WIDTH = 11;
+  parameter ID = 0;
   logic [WIDTH-1:0] data;
   logic [2:0] control; 
   logic core_control_select; 
@@ -50,6 +51,7 @@ module big_split (interface inPort, interface controlPort, interface core_output
       join    end 
     else if(control == 3'b100)
     begin
+      control = ID;
       core_output.Send(data);
       core_control_out.Send(control);
     end
@@ -216,6 +218,7 @@ module path_computation_module (interface in, interface d_out2core, interface co
               interface control_out1, interface control_out2, interface control_out3, interface control_out4);
 
   parameter ADDR = 4'b0000;
+  parameter ID = 0;
   logic [3:0] addr_store;
   assign addr_store = ADDR;
   //Interface Vector instatiation: 4-phase bundled data channel
@@ -228,7 +231,7 @@ module path_computation_module (interface in, interface d_out2core, interface co
    //concatenate_module  #(.ADDR(ADDR)) cm(addr_in,d_in, out_intf, addr_intf[0] );
    concatenate_module  #(.ADDR(ADDR)) cm(.in(in), .out(out_intf), .control_router(control_router_intf));
 
-   big_split big_split (.inPort(out_intf), .controlPort(control_router_intf), .core_output(d_out2core), .core_control_out(core_control_out),
+   big_split #(.ID(ID))  big_split (.inPort(out_intf), .controlPort(control_router_intf), .core_output(d_out2core), .core_control_out(core_control_out),
                .outPort1(d_out2router1), .outPort2(d_out2router2), .outPort3(d_out2router3), .outPort4(d_out2router4),
               .control_out1(control_out1), .control_out2(control_out2), .control_out3(control_out3), .control_out4(control_out4)
               );

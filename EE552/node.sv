@@ -13,7 +13,7 @@ module node(interface in1, interface in2, interface in3, interface in4,
 	Channel #(.WIDTH(7), .hsProtocol(P4PhaseBD)) data_intf1  [1:0] (); 
     Channel #(.WIDTH(4), .hsProtocol(P4PhaseBD)) addr_intf1  [1:0] (); 
     Channel #(.WIDTH(11), .hsProtocol(P4PhaseBD)) data_11b [4:0] (); 
-    Channel #(.WIDTH(2), .hsProtocol(P4PhaseBD)) core_control_intf[4:0] (); 
+    Channel #(.WIDTH(3), .hsProtocol(P4PhaseBD)) core_control_intf[4:0] (); 
     Channel #(.WIDTH(3), .hsProtocol(P4PhaseBD)) router_control_intf[3:0] (); 
     Channel #(.WIDTH(3), .hsProtocol(P4PhaseBD)) data_control_intf0[4:0] (); 
     Channel #(.WIDTH(3), .hsProtocol(P4PhaseBD)) data_control_intf1[4:0] (); 
@@ -31,22 +31,22 @@ module node(interface in1, interface in2, interface in3, interface in4,
 
 	core core1 (.dg_8b(dg), .db_8b(db), .data_out_11b(core_data_to_arbiter), .data_in_11b(data_11b[4]));
 
-	path_computation_module #(.ADDR(MyIP)) pc0 (.in(in1), .d_out2core(data_11b[0]),
+	path_computation_module #(.ADDR(MyIP), .ID(0)) pc0 (.in(in1), .d_out2core(data_11b[0]),
 						 .d_out2router1(data_to_merge0[0]), .d_out2router2(data_to_merge1[0]), .d_out2router3(data_to_merge2[0]), .d_out2router4(data_to_merge3[0]),
 						 .core_control_out(core_control_intf[0]),
 						 .control_out1(data_control_intf0[0]), .control_out2(data_control_intf0[1]), .control_out3(data_control_intf0[2]), .control_out4(data_control_intf0[3]));
 
-	path_computation_module #(.ADDR(MyIP)) pc1 (.in(in2), .d_out2core(data_11b[1]),
+	path_computation_module #(.ADDR(MyIP), .ID(1)) pc1 (.in(in2), .d_out2core(data_11b[1]),
 						 .d_out2router1(data_to_merge0[1]), .d_out2router2(data_to_merge1[1]), .d_out2router3(data_to_merge2[1]), .d_out2router4(data_to_merge3[1]),
 						 .core_control_out(core_control_intf[1]),
 						 .control_out1(data_control_intf1[0]), .control_out2(data_control_intf1[1]), .control_out3(data_control_intf1[2]), .control_out4(data_control_intf1[3]));
 
-	path_computation_module #(.ADDR(MyIP)) pc2 (.in(in3), .d_out2core(data_11b[2]),
+	path_computation_module #(.ADDR(MyIP), .ID(2)) pc2 (.in(in3), .d_out2core(data_11b[2]),
 						 .d_out2router1(data_to_merge0[2]), .d_out2router2(data_to_merge1[2]), .d_out2router3(data_to_merge2[2]), .d_out2router4(data_to_merge3[2]),
 						 .core_control_out(core_control_intf[2]),
 						 .control_out1(data_control_intf2[0]), .control_out2(data_control_intf2[1]), .control_out3(data_control_intf2[2]), .control_out4(data_control_intf2[3]));
 
-	path_computation_module #(.ADDR(MyIP)) pc3 (.in(in4), .d_out2core(data_11b[3]),
+	path_computation_module #(.ADDR(MyIP), .ID(3)) pc3 (.in(in4), .d_out2core(data_11b[3]),
 						 .d_out2router1(data_to_merge0[3]), .d_out2router2(data_to_merge1[3]), .d_out2router3(data_to_merge2[3]), .d_out2router4(data_to_merge3[3]),
 						 .core_control_out(core_control_intf[3]),
 						 .control_out1(data_control_intf3[0]), .control_out2(data_control_intf3[1]), .control_out3(data_control_intf3[2]), .control_out4(data_control_intf3[3]));
@@ -90,7 +90,7 @@ module node_merge (interface in1, interface in2, interface in3, interface in4, i
 	parameter FL = 2;
 	parameter BL = 2;
 	logic [10:0] data;
-	logic [1:0] control_in_bit;
+	logic [2:0] control_in_bit;
 	always begin
 		control_in.Receive(control_in_bit);
 		if (control_in_bit == 0) 
