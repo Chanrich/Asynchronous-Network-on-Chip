@@ -35,11 +35,11 @@ module data_generator (interface data_out);
       // Push back data for verification
       tb_module.time_queue[int'(addr)].push_back($time);
       tb_module.data_queue[int'(addr)].push_back(SendValue);
-      $display("Starting to send to %d with %b", addr , SendValue);
+      //$display("Starting to send to %d with %b", addr , SendValue);
 
       // Increment global counter
       tb_module.total_send += 1;
-      $display("Start module data_gen and time is %d, Send count: %d", $time, tb_module.total_send); 
+      //$display("Start module data_gen and time is %d, Send count: %d", $time, tb_module.total_send); 
       counter += 1; // local counter
     end
     #13;
@@ -68,16 +68,17 @@ module data_bucket (interface r);
       tb_module.receive_count = tb_module.receive_count + 1;
       // Global Cycle Count
       tb_module.cycle_queue[MYID] += 1;
-      $display("Data bucket [%d] is receiving %b | Receive count: %d 
-          Bucket Avg Cycle Time: %f, Sum Cycles: %f ", MYID, 
-          ReceiveValue, tb_module.receive_count,
-           (tb_module.sum_travel_time[MYID]/tb_module.cycle_queue[MYID]), tb_module.sum_travel_time[MYID]);
+      tb_module.throughput[MYID] = tb_module.cycle_queue[MYID] / $time;
+      // $display("Data bucket [%d] is receiving %b | Receive count: %d 
+      //     Bucket Avg Cycle Time: %f, Sum Cycles: %f ", MYID, 
+      //     ReceiveValue, tb_module.receive_count,
+      //      (tb_module.sum_travel_time[MYID]/tb_module.cycle_queue[MYID]), tb_module.sum_travel_time[MYID]);
 
       // Check the receive data if it matched
       queue_check = tb_module.data_queue[MYID].find_first_index(x) with ( x == ReceiveValue);
-      $display("\tMatching:  Data_queue: %b, Data Received: %b", tb_module.data_queue[MYID][queue_check[0]], ReceiveValue);
+      //$display("\tMatching:  Data_queue: %b, Data Received: %b", tb_module.data_queue[MYID][queue_check[0]], ReceiveValue);
       if (tb_module.data_queue[MYID][queue_check[0]] == ReceiveValue) begin
-        $display("\tData matched");
+        //$display("\tData matched");
         tb_module.data_queue[MYID].delete(queue_check[0]);
       end
 
@@ -92,6 +93,8 @@ module tb_module;
   reg [7:0] data_queue [16] [$];
   integer cycle_queue [16];
   real sum_travel_time [16];
+  real throughput [16];
+  real total_throughput;
   real total_travel_time;
   integer receive_count;
   integer total_send;
@@ -154,9 +157,10 @@ initial
     for (int i=0; i < 16; i++)begin
       cycle_queue[i] = 0;
       sum_travel_time[i] = 0;
+      throughput[i] = 0;
     end
-    #10;
     $display("Waiting for receivers");
+    #10;
     wait (receive_count == total_send);
     $display("Received: %d",receive_count);
     // fp_result = $fopen("result_output.txt","w");
@@ -174,7 +178,12 @@ initial
       total_travel_time += (sum_travel_time[i]/cycle_queue[i]) ;
       $display("\tNode[%d]: Average Cycle Time: %f", i, (sum_travel_time[i]/cycle_queue[i]));
     end
-    $display("\nOverall Average Cycle Time:%f\n", total_travel_time/16);
+    for (int i =0; i < 16; i++)begin
+      // Print Throughput
+      total_throughput += throughput[i];
+      $display("\tNode[%d]: Average Throughput: %f", i, throughput[i]);
+    end
+    $display("\nOverall Average Cycle Time:%f\nAverage Throughput\n", total_travel_time/16, total_throughput/16);
 
 
     if (error_flag == 1) 
