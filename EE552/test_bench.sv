@@ -1,7 +1,7 @@
 `timescale 1ns/1fs
 //NOTE: you need to compile SystemVerilogCSP.sv as well
 import SystemVerilogCSP::*;
-`define send_count 10
+`define send_count 200
 
 module data_generator (interface data_out);
   parameter FL = 0; //ideal environment
@@ -42,7 +42,7 @@ module data_generator (interface data_out);
       $display("Start module data_gen and time is %d, Send count: %d", $time, tb_module.total_send); 
       counter += 1; // local counter
     end
-    #5;
+    #3;
   end
 endmodule
 
@@ -61,26 +61,32 @@ module data_bucket (interface r);
       //Save the simulation time when Receive starts
       r.Receive(ReceiveValue);
       // Calculate Avg Cycle Time
-      time_started = tb_module.time_queue[MYID].pop_back();
-      time_spent_during_travel = $time - time_started ;
-      tb_module.sum_travel_time[MYID] += time_spent_during_travel;
+      //time_started = tb_module.time_queue[MYID].pop_back();
+      //time_spent_during_travel = $time - time_started ;
+      //tb_module.sum_travel_time[MYID] += time_spent_during_travel;
       // Global Receive Count
       tb_module.receive_count = tb_module.receive_count + 1;
       // Global Cycle Count
       tb_module.cycle_queue[MYID] += 1;
       tb_module.throughput[MYID] = tb_module.cycle_queue[MYID] / $time;
-      $display("Data bucket [%d] is receiving %b | Receive count: %d 
-          Bucket Avg Cycle Time: %f, Sum Cycles: %f ", MYID, 
-          ReceiveValue, tb_module.receive_count,
-           (tb_module.sum_travel_time[MYID]/tb_module.cycle_queue[MYID]), tb_module.sum_travel_time[MYID]);
 
       // Check the receive data if it matched
       queue_check = tb_module.data_queue[MYID].find_first_index(x) with ( x == ReceiveValue);
       //$display("\tMatching:  Data_queue: %b, Data Received: %b", tb_module.data_queue[MYID][queue_check[0]], ReceiveValue);
       if (tb_module.data_queue[MYID][queue_check[0]] == ReceiveValue) begin
         //$display("\tData matched");
+        time_started = tb_module.time_queue[MYID][queue_check[0]];
+        time_spent_during_travel = $time - time_started ;
+        tb_module.sum_travel_time[MYID] += time_spent_during_travel;
+        tb_module.time_queue[MYID].delete(queue_check[0]);
+
         tb_module.data_queue[MYID].delete(queue_check[0]);
       end
+        $display("Data bucket [%d] is receiving %b | Receive count: %d 
+      Bucket Avg Cycle Time: %f, Sum Cycles: %f ", MYID, 
+      ReceiveValue, tb_module.receive_count,
+       (tb_module.sum_travel_time[MYID]/tb_module.cycle_queue[MYID]), tb_module.sum_travel_time[MYID]);
+
 
       #BL;
   end

@@ -87,8 +87,8 @@ module node(interface in1, interface in2, interface in3, interface in4,
 endmodule // node
 
 module node_merge (interface in1, interface in2, interface in3, interface in4, interface control_in, interface out);
-	parameter FL = 2;
-	parameter BL = 2;
+	parameter FL = 1;
+	parameter BL = 1;
 	logic [10:0] data;
 	logic [2:0] control_in_bit;
 	always begin
@@ -117,8 +117,8 @@ module node_merge (interface in1, interface in2, interface in3, interface in4, i
 endmodule
 
 module router_merge (interface in1, interface in2, interface in3, interface in4, interface in5, interface control_in, interface out);
-	parameter FL = 2;
-	parameter BL = 2;
+	parameter FL = 1;
+	parameter BL = 1;
 	logic [10:0] data;
 	logic [2:0] control_in_bit;
 	always begin

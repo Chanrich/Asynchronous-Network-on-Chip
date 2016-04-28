@@ -54,11 +54,11 @@ module input_arbiter_5_3bit(interface in1, interface in2, interface in3, interfa
 	// inputs take 11 bits
 	Channel #(.hsProtocol(P4PhaseBD), .WIDTH(3)) data_intf[2:0] (); 
 
-	arbiter2 #(.FL(2), .BL(2), .WIDTH(3)) ar1(.in0(in1), .in1(in2), .out(data_intf[0]));
-	arbiter2 #(.FL(2), .BL(2), .WIDTH(3)) ar2(.in0(in3), .in1(in4), .out(data_intf[2]));
+	arbiter2 #(.FL(0), .BL(0), .WIDTH(3)) ar1(.in0(in1), .in1(in2), .out(data_intf[0]));
+	arbiter2 #(.FL(0), .BL(0), .WIDTH(3)) ar2(.in0(in3), .in1(in4), .out(data_intf[2]));
 
-	arbiter2 #(.FL(2), .BL(2), .WIDTH(3)) ar3(.in0(data_intf[0]), .in1(data_intf[2]), .out(data_intf[1]));
-	arbiter2 #(.FL(2), .BL(2), .WIDTH(3)) ar4(.in0(data_intf[1]), .in1(in5), .out(data_out));
+	arbiter2 #(.FL(0), .BL(0), .WIDTH(3)) ar3(.in0(data_intf[0]), .in1(data_intf[2]), .out(data_intf[1]));
+	arbiter2 #(.FL(0), .BL(0), .WIDTH(3)) ar4(.in0(data_intf[1]), .in1(in5), .out(data_out));
 
 endmodule
 
@@ -66,10 +66,10 @@ module input_arbiter_4_3bit(interface in1, interface in2, interface in3, interfa
 	// inputs take 11 bits
 	Channel #(.hsProtocol(P4PhaseBD), .WIDTH(3)) data_intf[1:0] (); 
 
-	arbiter2 #(.FL(2), .BL(2), .WIDTH(3)) ar1(.in0(in1), .in1(in2), .out(data_intf[0]));
-	arbiter2 #(.FL(2), .BL(2), .WIDTH(3)) ar2(.in0(in3), .in1(in4), .out(data_intf[1]));
+	arbiter2 #(.FL(0), .BL(0), .WIDTH(3)) ar1(.in0(in1), .in1(in2), .out(data_intf[0]));
+	arbiter2 #(.FL(0), .BL(0), .WIDTH(3)) ar2(.in0(in3), .in1(in4), .out(data_intf[1]));
 
-	arbiter2 #(.FL(2), .BL(2), .WIDTH(3)) ar4(.in0(data_intf[0]), .in1(data_intf[1]), .out(data_out));
+	arbiter2 #(.FL(0), .BL(0), .WIDTH(3)) ar4(.in0(data_intf[0]), .in1(data_intf[1]), .out(data_out));
 
 endmodule
 
