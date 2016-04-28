@@ -8,7 +8,7 @@ module big_split (interface inPort, interface controlPort, interface core_output
   parameter FL = 1;
   parameter BL = 1;
   parameter WIDTH = 11;
-  parameter ID = 0;
+  parameter ID = 3'b000;
   logic [WIDTH-1:0] data;
   logic [2:0] control;
   logic [2:0] mydata_id; 
@@ -28,32 +28,32 @@ module big_split (interface inPort, interface controlPort, interface core_output
     if(control == 3'b000 )
     begin 
       fork
-      control_out1.Send(control);
+      control_out1.Send(mydata_id);
       outPort1.Send(data);
       join
     end
     else if(control == 3'b001)
     begin 
       fork
-      control_out2.Send(control);
+      control_out2.Send(mydata_id);
       outPort2.Send(data);
       join    end 
     else if(control == 3'b010)
     begin 
       fork
-      control_out3.Send(control);
+      control_out3.Send(mydata_id);
       outPort3.Send(data);
       join    end 
     else if(control == 3'b011)
     begin 
       fork
-      control_out4.Send(control);
+      control_out4.Send(mydata_id);
       outPort4.Send(data);
       join    end 
     else if(control == 3'b100)
     begin
       core_output.Send(data);
-      core_control_out.Send(control);
+      core_control_out.Send(mydata_id);
     end
     
     #BL;  //Backward Latency: Delay from the time data is delivered to the time next input can be accepted
@@ -68,7 +68,7 @@ module big_split_no_core (interface inPort, interface controlPort,
   parameter FL = 1;
   parameter BL = 1;
   parameter WIDTH = 11;
-  parameter ID = 0;
+  parameter ID = 3'b000;
 
   logic [WIDTH-1:0] data;
   logic [2:0] control; 
@@ -90,26 +90,26 @@ module big_split_no_core (interface inPort, interface controlPort,
     if(control == 3'b000 )
     begin 
       fork
-      control_out1.Send(control);
+      control_out1.Send(mydata_id);
       outPort1.Send(data);
       join
     end
     else if(control == 3'b001)
     begin 
       fork
-      control_out2.Send(control);
+      control_out2.Send(mydata_id);
       outPort2.Send(data);
       join    end 
     else if(control == 3'b010)
     begin 
       fork
-      control_out3.Send(control);
+      control_out3.Send(mydata_id);
       outPort3.Send(data);
       join    end 
     else if(control == 3'b011)
     begin 
       fork
-      control_out4.Send(control);
+      control_out4.Send(mydata_id);
       outPort4.Send(data);
       join    
     end 
@@ -224,7 +224,7 @@ module path_computation_module (interface in, interface d_out2core, interface co
               interface control_out1, interface control_out2, interface control_out3, interface control_out4);
 
   parameter ADDR = 4'b0000;
-  parameter ID = 0;
+  parameter ID = 3'b000;
   logic [3:0] addr_store;
   assign addr_store = ADDR;
   //Interface Vector instatiation: 4-phase bundled data channel
@@ -251,7 +251,7 @@ module path_computation_module_4out (interface in,
               interface control_out1, interface control_out2, interface control_out3, interface control_out4);
 
   parameter ADDR = 4'b0000;
-  parameter ID = 0;
+  parameter ID = 3'b000;
 
   logic [3:0] addr_store;
   assign addr_store = ADDR;
