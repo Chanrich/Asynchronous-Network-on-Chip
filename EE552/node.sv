@@ -31,27 +31,27 @@ module node(interface in1, interface in2, interface in3, interface in4,
 
 	core core1 (.dg_8b(dg), .db_8b(db), .data_out_11b(core_data_to_arbiter), .data_in_11b(data_11b[4]));
 
-	path_computation_module #(.ADDR(MyIP), .ID(0)) pc0 (.in(in1), .d_out2core(data_11b[0]),
+	path_computation_module #(.ADDR(MyIP), .ID(3'b000)) pc0 (.in(in1), .d_out2core(data_11b[0]),
 						 .d_out2router1(data_to_merge0[0]), .d_out2router2(data_to_merge1[0]), .d_out2router3(data_to_merge2[0]), .d_out2router4(data_to_merge3[0]),
 						 .core_control_out(core_control_intf[0]),
 						 .control_out1(data_control_intf0[0]), .control_out2(data_control_intf0[1]), .control_out3(data_control_intf0[2]), .control_out4(data_control_intf0[3]));
 
-	path_computation_module #(.ADDR(MyIP), .ID(1)) pc1 (.in(in2), .d_out2core(data_11b[1]),
+	path_computation_module #(.ADDR(MyIP), .ID(3'b001)) pc1 (.in(in2), .d_out2core(data_11b[1]),
 						 .d_out2router1(data_to_merge0[1]), .d_out2router2(data_to_merge1[1]), .d_out2router3(data_to_merge2[1]), .d_out2router4(data_to_merge3[1]),
 						 .core_control_out(core_control_intf[1]),
 						 .control_out1(data_control_intf1[0]), .control_out2(data_control_intf1[1]), .control_out3(data_control_intf1[2]), .control_out4(data_control_intf1[3]));
 
-	path_computation_module #(.ADDR(MyIP), .ID(2)) pc2 (.in(in3), .d_out2core(data_11b[2]),
+	path_computation_module #(.ADDR(MyIP), .ID(3'b010)) pc2 (.in(in3), .d_out2core(data_11b[2]),
 						 .d_out2router1(data_to_merge0[2]), .d_out2router2(data_to_merge1[2]), .d_out2router3(data_to_merge2[2]), .d_out2router4(data_to_merge3[2]),
 						 .core_control_out(core_control_intf[2]),
 						 .control_out1(data_control_intf2[0]), .control_out2(data_control_intf2[1]), .control_out3(data_control_intf2[2]), .control_out4(data_control_intf2[3]));
 
-	path_computation_module #(.ADDR(MyIP), .ID(3)) pc3 (.in(in4), .d_out2core(data_11b[3]),
+	path_computation_module #(.ADDR(MyIP), .ID(3'b011)) pc3 (.in(in4), .d_out2core(data_11b[3]),
 						 .d_out2router1(data_to_merge0[3]), .d_out2router2(data_to_merge1[3]), .d_out2router3(data_to_merge2[3]), .d_out2router4(data_to_merge3[3]),
 						 .core_control_out(core_control_intf[3]),
 						 .control_out1(data_control_intf3[0]), .control_out2(data_control_intf3[1]), .control_out3(data_control_intf3[2]), .control_out4(data_control_intf3[3]));
 
-	path_computation_module_4out #(.ADDR(MyIP), .ID(4)) pc4 (.in(core_data_to_arbiter),
+	path_computation_module_4out #(.ADDR(MyIP), .ID(3'b100)) pc4 (.in(core_data_to_arbiter),
             			 .d_out2router1(data_to_merge0[4]), .d_out2router2(data_to_merge1[4]), .d_out2router3(data_to_merge2[4]), .d_out2router4(data_to_merge3[4]),
             			  .control_out1(data_control_intf4[0]), .control_out2(data_control_intf4[1]), .control_out3(data_control_intf4[2]), .control_out4(data_control_intf4[3]));
 
