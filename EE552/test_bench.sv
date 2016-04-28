@@ -1,17 +1,16 @@
 `timescale 1ns/1fs
 //NOTE: you need to compile SystemVerilogCSP.sv as well
 import SystemVerilogCSP::*;
-`define test_count 2000
-`define send_count 10
+`define send_count 64
+
 module data_generator (interface data_out);
-  parameter WIDTH = 8;
   parameter FL = 0; //ideal environment
   parameter MYID = 0;
   logic [3:0] addr;
   //logic [3:0] starting_addr;
   logic [3:0] data;
   logic [16:0] counter;
-  logic [WIDTH-1:0] SendValue=0;
+  logic [7:0] SendValue=0;
 
   initial begin
     counter = 0;
@@ -19,35 +18,31 @@ module data_generator (interface data_out);
 
   always
   begin 
-    //add a display here to see when this module starts its main loop
-    //$display("Start module data_generator and time is %d", $time);
     if (counter < `send_count) begin
       addr = $random() % (2**4);
       data = $random() % (2**4);
-
-      //starting_addr = $random() % (2**4);
-      //starting_addr = addr; 
       while(MYID == addr)
       begin
-        //$display("in while loop");
         addr = $random() % (2**4);
       end
       #FL;
 
       SendValue = {data,addr};
-      //$display("data generator is sending %b",SendValue);
        
       //Communication action Send is about to start
-     // $display("Starting %m.Send @ %d", $time);
       data_out.Send(SendValue);
-      tb_module.original.push_back(SendValue);
+
+      // Push back data for verification
+      tb_module.time_queue[int'(addr)].push_back($time);
+      tb_module.data_queue[int'(addr)].push_back(SendValue);
+      $display("Starting to send to %d with %b", addr , SendValue);
+
+      // Increment global counter
       tb_module.total_send += 1;
       $display("Start module data_gen and time is %d, Send count: %d", $time, tb_module.total_send); 
-      counter += 1;
+      counter += 1; // local counter
     end
-    #10;
-    //Communication action Send is finished
-   // $display("Finished %m.Send @ %d", $time);
+    #13;
   end
 endmodule
 
@@ -58,86 +53,50 @@ module data_bucket (interface r);
   parameter MYID = 0;
   logic [WIDTH-1:0] ReceiveValue = 0;
   //Variables added for performance measurements
-  /*real cycleCounter=0, //# of cycles = Total number of times a value is received
-       timeOfReceive=0, //Simulation time of the latest Receive 
-       cycleTime=0; // time difference between the last two receives
-  real averageThroughput=0, averageCycleTime=0, sumOfCycleTimes=0;*/
+  real time_started, time_spent_during_travel;
+  int queue_check[$];
 
   always
   begin
-      //$display("Start module data_bucket and time is %d", $time);	
       //Save the simulation time when Receive starts
-      //timeOfReceive = $time;
       r.Receive(ReceiveValue);
-      tb_module.result.push_back(ReceiveValue);
+      // Calculate Avg Cycle Time
+      time_started = tb_module.time_queue[MYID].pop_back();
+      time_spent_during_travel = $time - time_started ;
+      tb_module.sum_travel_time[MYID] += time_spent_during_travel;
+      // Global Receive Count
       tb_module.receive_count = tb_module.receive_count + 1;
-      $display("Data bucket [%d] is receiving %b | Receive count: %d", MYID, ReceiveValue, tb_module.receive_count);
+      // Global Cycle Count
+      tb_module.cycle_queue[MYID] += 1;
+      $display("Data bucket [%d] is receiving %b | Receive count: %d 
+          Bucket Avg Cycle Time: %f, Sum Cycles: %f ", MYID, 
+          ReceiveValue, tb_module.receive_count,
+           (tb_module.sum_travel_time[MYID]/tb_module.cycle_queue[MYID]), tb_module.sum_travel_time[MYID]);
+
+      // Check the receive data if it matched
+      queue_check = tb_module.data_queue[MYID].find_first_index(x) with ( x == ReceiveValue);
+      $display("\tMatching:  Data_queue: %b, Data Received: %b", tb_module.data_queue[MYID][queue_check[0]], ReceiveValue);
+      if (tb_module.data_queue[MYID][queue_check[0]] == ReceiveValue) begin
+        $display("\tData matched");
+        tb_module.data_queue[MYID].delete(queue_check[0]);
+      end
+
       #BL;
   end
 endmodule
 
-
-
-module split (interface inPort, interface controlPort, interface outPort[15:0]);
-  parameter FL = 0;
-  parameter BL = 0;
-  parameter WIDTH = 8;
-  logic [WIDTH-1:0] data;
-  logic [3:0] control; 
-  always
-  begin
-    //add a display here to see when this module starts its main loop
-    //$display("starting split ***%m at %d",$time);
-    fork
-      controlPort.Receive(control);
-      inPort.Receive(data);
-    join
-    
-    #FL; //Forward Latency: Delay from recieving inputs to send the results forward
-    
-    case (control)
-      4'b0000: outPort[0].Send(data);
-      4'b0001: outPort[1].Send(data);
-      4'b0010: outPort[2].Send(data);
-      4'b0011: outPort[3].Send(data);
-      4'b0100: outPort[4].Send(data);
-      4'b0101: outPort[5].Send(data);
-      4'b0110: outPort[6].Send(data);
-      4'b0111: outPort[7].Send(data);
-      4'b1000: outPort[8].Send(data);
-      4'b1001: outPort[9].Send(data);
-      4'b1010: outPort[10].Send(data);
-      4'b1011: outPort[11].Send(data);
-      4'b1100: outPort[12].Send(data);
-      4'b1101: outPort[13].Send(data);
-      4'b1110: outPort[14].Send(data);
-      4'b1111: outPort[15].Send(data); 
-    endcase
-
-  
-    #BL;  //Backward Latency: Delay from the time data is delivered to the time next input can be accepted
-  end
-endmodule
-
-
-
-
-
 module tb_module; 
 
-  logic [7:0] data; 
-  logic [3:0] control; 
-  int i;
-  int result_size;
-  reg [15:0] original [$];
-  reg [15:0] result [$];
-  reg [7:0] result_data;
-  int queue_check[$];
+  logic error_flag;
+  reg [15:0] time_queue [16] [$];
+  reg [7:0] data_queue [16] [$];
+  integer cycle_queue [16];
+  real sum_travel_time [16];
+  real total_travel_time;
   integer receive_count;
   integer total_send;
-  integer check_count;
-  integer fp_result;
-  integer fp_original;
+  //integer fp_result;
+  //integer fp_original;
 
 
   Channel #(.WIDTH(8), .hsProtocol(P4PhaseBD)) data_intf  [1:0] (); 
@@ -187,62 +146,62 @@ module tb_module;
 
 initial 
   begin 
+    // initialize
     receive_count = 0;
-    check_count = 0;
+    error_flag = 0;
     total_send = 0;
+    total_travel_time = 0;
+    for (int i=0; i < 16; i++)begin
+      cycle_queue[i] = 0;
+      sum_travel_time[i] = 0;
+    end
     #10;
     $display("Waiting for receivers");
     wait (receive_count == total_send);
     $display("Received: %d",receive_count);
-    // for(i = 0; i<10; i++)
-    // begin 
-    //   case (spdg.control)
-    //   4'b0000: intf2core[0].Receive(data); 
-    //   4'b0001: intf2core[1].Receive(data); 
-    //   4'b0010: intf2core[2].Receive(data); 
-    //   4'b0011: intf2core[3].Receive(data); 
-    //   4'b0100: intf2core[4].Receive(data); 
-    //   4'b0101: intf2core[5].Receive(data); 
-    //   4'b0110: intf2core[6].Receive(data); 
-    //   4'b0111: intf2core[7].Receive(data); 
-    //   4'b1000: intf2core[8].Receive(data); 
-    //   4'b1001: intf2core[9].Receive(data); 
-    //   4'b1010: intf2core[10].Receive(data); 
-    //   4'b1011: intf2core[11].Receive(data); 
-    //   4'b1100: intf2core[12].Receive(data); 
-    //   4'b1101: intf2core[13].Receive(data); 
-    //   4'b1110: intf2core[14].Receive(data); 
-    //   4'b1111: intf2core[15].Receive(data); 
-    //   endcase
-
-    //   $display("data is %b and control is %b",data,spdg.control);
-
-    //   //#20;
-    // end
-
-    fp_result = $fopen("result_output.txt","w");
-
-    result_size = result.size();
-    while(result.size()!=0)
-    begin 
-      check_count = check_count + 1;
-      $display("Checking %d in the queue", check_count);
-      result_data = result.pop_front();
-      queue_check = original.find_first_index(x) with ( x == result_data);
-      $display("at index %d\n\tOriginal: %b, Result: %b", queue_check[0], original[queue_check[0]], result_data);
-      if (original[queue_check[0]] == result_data) begin
-        $display("matched, remove the item from original");
-        original.delete(queue_check[0]);
+    // fp_result = $fopen("result_output.txt","w");
+    $display("Received all data, perform final check up");
+    for (int i =0; i < 16; i++)begin
+      // Loop through data queue, should have 0 element left
+      $display("Checking data_queue[%d].size: %d", i, data_queue[i].size());
+      // If any of the queue has non-zero, set error flag
+      if (data_queue[i].size() != 0) begin
+        error_flag = 1;
       end
-      $fwrite(fp_result,"%b\n",result_data);
     end
-    $fclose(fp_result); 
-    $display("Original queue has %d elements left", original.size() );
-    if (original.size() != 0) begin
-      $display("Not matched");
-    end else begin
-      $display("############  Matched  ###########");
+    for (int i =0; i < 16; i++)begin
+      // Print Cycle Time
+      total_travel_time += (sum_travel_time[i]/cycle_queue[i]) ;
+      $display("\tNode[%d]: Average Cycle Time: %f", i, (sum_travel_time[i]/cycle_queue[i]));
     end
+    $display("\nOverall Average Cycle Time:%f\n", total_travel_time/16);
+
+
+    if (error_flag == 1) 
+      $display(" =====   Error ===== ");
+    else
+      $display(" ===== Test Successful ======\n Total Sent: %d Total Received: %d", total_send, receive_count);
+    // result_size = result.size();
+    // while(result.size()!=0)
+    // begin 
+    //   check_count = check_count + 1;
+    //   $display("Checking %d in the queue", check_count);
+    //   result_data = result.pop_front();
+    //   queue_check = original.find_first_index(x) with ( x == result_data);
+    //   $display("at index %d\n\tOriginal: %b, Result: %b", queue_check[0], original[queue_check[0]], result_data);
+    //   if (original[queue_check[0]] == result_data) begin
+    //     $display("matched, remove the item from original");
+    //     original.delete(queue_check[0]);
+    //   end
+    //   $fwrite(fp_result,"%b\n",result_data);
+    // end
+    // $fclose(fp_result); 
+    // $display("Original queue has %d elements left", original.size() );
+    // if (original.size() != 0) begin
+    //   $display("Not matched");
+    // end else begin
+    //   $display("############  Matched  ###########");
+    // end
 
   end 
 
