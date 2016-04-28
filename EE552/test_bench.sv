@@ -39,7 +39,7 @@ module data_generator (interface data_out);
 
       // Increment global counter
       tb_module.total_send += 1;
-      //$display("Start module data_gen and time is %d, Send count: %d", $time, tb_module.total_send); 
+      $display("Start module data_gen and time is %d, Send count: %d", $time, tb_module.total_send); 
       counter += 1; // local counter
     end
     #13;
@@ -69,10 +69,10 @@ module data_bucket (interface r);
       // Global Cycle Count
       tb_module.cycle_queue[MYID] += 1;
       tb_module.throughput[MYID] = tb_module.cycle_queue[MYID] / $time;
-      // $display("Data bucket [%d] is receiving %b | Receive count: %d 
-      //     Bucket Avg Cycle Time: %f, Sum Cycles: %f ", MYID, 
-      //     ReceiveValue, tb_module.receive_count,
-      //      (tb_module.sum_travel_time[MYID]/tb_module.cycle_queue[MYID]), tb_module.sum_travel_time[MYID]);
+      $display("Data bucket [%d] is receiving %b | Receive count: %d 
+          Bucket Avg Cycle Time: %f, Sum Cycles: %f ", MYID, 
+          ReceiveValue, tb_module.receive_count,
+           (tb_module.sum_travel_time[MYID]/tb_module.cycle_queue[MYID]), tb_module.sum_travel_time[MYID]);
 
       // Check the receive data if it matched
       queue_check = tb_module.data_queue[MYID].find_first_index(x) with ( x == ReceiveValue);

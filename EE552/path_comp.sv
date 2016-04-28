@@ -10,7 +10,8 @@ module big_split (interface inPort, interface controlPort, interface core_output
   parameter WIDTH = 11;
   parameter ID = 0;
   logic [WIDTH-1:0] data;
-  logic [2:0] control; 
+  logic [2:0] control;
+  logic [2:0] mydata_id; 
   logic core_control_select; 
   logic [2:0] output_control; 
   always
@@ -23,11 +24,10 @@ module big_split (interface inPort, interface controlPort, interface core_output
     join
     
     #FL; //Forward Latency: Delay from recieving inputs to send the results forward
-    
+    mydata_id = ID;
     if(control == 3'b000 )
     begin 
       fork
-      control = ID;
       control_out1.Send(control);
       outPort1.Send(data);
       join
@@ -35,27 +35,23 @@ module big_split (interface inPort, interface controlPort, interface core_output
     else if(control == 3'b001)
     begin 
       fork
-      control = ID;
       control_out2.Send(control);
       outPort2.Send(data);
       join    end 
     else if(control == 3'b010)
     begin 
       fork
-        control = ID;
       control_out3.Send(control);
       outPort3.Send(data);
       join    end 
     else if(control == 3'b011)
     begin 
       fork
-      control = ID;
       control_out4.Send(control);
       outPort4.Send(data);
       join    end 
     else if(control == 3'b100)
     begin
-      control = ID;
       core_output.Send(data);
       core_control_out.Send(control);
     end
@@ -76,6 +72,9 @@ module big_split_no_core (interface inPort, interface controlPort,
 
   logic [WIDTH-1:0] data;
   logic [2:0] control; 
+  logic [2:0] mydata_id; 
+
+
   always
   begin
     //add a display here to see when this module starts its main loop
@@ -86,11 +85,11 @@ module big_split_no_core (interface inPort, interface controlPort,
     join
     
     #FL; //Forward Latency: Delay from recieving inputs to send the results forward
-    
+    mydata_id = ID;
+
     if(control == 3'b000 )
     begin 
       fork
-      control = ID;
       control_out1.Send(control);
       outPort1.Send(data);
       join
@@ -98,21 +97,18 @@ module big_split_no_core (interface inPort, interface controlPort,
     else if(control == 3'b001)
     begin 
       fork
-      control = ID;
       control_out2.Send(control);
       outPort2.Send(data);
       join    end 
     else if(control == 3'b010)
     begin 
       fork
-        control = ID;
       control_out3.Send(control);
       outPort3.Send(data);
       join    end 
     else if(control == 3'b011)
     begin 
       fork
-      control = ID;
       control_out4.Send(control);
       outPort4.Send(data);
       join    
