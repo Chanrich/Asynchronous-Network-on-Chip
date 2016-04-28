@@ -1,7 +1,7 @@
 `timescale 1ns/1fs
 //NOTE: you need to compile SystemVerilogCSP.sv as well
 import SystemVerilogCSP::*;
-`define send_count 64
+`define send_count 10
 
 module data_generator (interface data_out);
   parameter FL = 0; //ideal environment
@@ -42,7 +42,7 @@ module data_generator (interface data_out);
       $display("Start module data_gen and time is %d, Send count: %d", $time, tb_module.total_send); 
       counter += 1; // local counter
     end
-    #13;
+    #5;
   end
 endmodule
 

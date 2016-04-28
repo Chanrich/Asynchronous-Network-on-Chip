@@ -5,8 +5,8 @@ import SystemVerilogCSP::*;
 module big_split (interface inPort, interface controlPort, interface core_output, interface core_control_out,
                interface outPort1, interface outPort2, interface outPort3, interface outPort4,
                 interface control_out1, interface control_out2, interface control_out3, interface control_out4);
-  parameter FL = 1;
-  parameter BL = 1;
+  parameter FL = 2;
+  parameter BL = 2;
   parameter WIDTH = 11;
   parameter ID = 3'b000;
   logic [WIDTH-1:0] data;
@@ -52,8 +52,10 @@ module big_split (interface inPort, interface controlPort, interface core_output
       join    end 
     else if(control == 3'b100)
     begin
+      fork
       core_output.Send(data);
       core_control_out.Send(mydata_id);
+      join
     end
     
     #BL;  //Backward Latency: Delay from the time data is delivered to the time next input can be accepted
@@ -65,8 +67,8 @@ endmodule
 module big_split_no_core (interface inPort, interface controlPort,
                interface outPort1, interface outPort2, interface outPort3, interface outPort4,
                 interface control_out1, interface control_out2, interface control_out3, interface control_out4);
-  parameter FL = 1;
-  parameter BL = 1;
+  parameter FL = 2;
+  parameter BL = 2;
   parameter WIDTH = 11;
   parameter ID = 3'b000;
 
@@ -119,8 +121,8 @@ module big_split_no_core (interface inPort, interface controlPort,
   end
 endmodule
 module concatenate_module (interface in, interface out, interface control_router);
-  parameter FL = 1;
-  parameter BL = 1;
+  parameter FL = 2;
+  parameter BL = 2;
   parameter ADDR = 4'b0000;
 
   logic [6:0] data;

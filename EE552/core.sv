@@ -2,8 +2,8 @@
 import SystemVerilogCSP::*;
 
 module core (interface dg_8b, interface db_8b, interface data_out_11b, interface data_in_11b);
-    parameter FL = 2;
-	parameter BL = 2;  
+    parameter FL = 0;
+	parameter BL = 0;  
 	logic select=0;
 	logic [10:0] router_data;
 	logic [7:0] dg_data;

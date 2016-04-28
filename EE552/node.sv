@@ -55,7 +55,7 @@ module node(interface in1, interface in2, interface in3, interface in4,
             			 .d_out2router1(data_to_merge0[4]), .d_out2router2(data_to_merge1[4]), .d_out2router3(data_to_merge2[4]), .d_out2router4(data_to_merge3[4]),
             			  .control_out1(data_control_intf4[0]), .control_out2(data_control_intf4[1]), .control_out3(data_control_intf4[2]), .control_out4(data_control_intf4[3]));
 
-	input_arbiter_4_2bit arbiter_4 (.in1(core_control_intf[0]), .in2(core_control_intf[1]),
+	input_arbiter_4_3bit arbiter_4 (.in1(core_control_intf[0]), .in2(core_control_intf[1]),
 									 .in3(core_control_intf[2]), .in4(core_control_intf[3]),
 									 .data_out(core_control_intf[4]));
 	node_merge node_merge1 (.in1(data_11b[0]), .in2(data_11b[1]), .in3(data_11b[2]), .in4(data_11b[3]),
@@ -93,19 +93,19 @@ module node_merge (interface in1, interface in2, interface in3, interface in4, i
 	logic [2:0] control_in_bit;
 	always begin
 		control_in.Receive(control_in_bit);
-		if (control_in_bit == 0) 
+		if (control_in_bit == 3'b000) 
 			begin
 				in1.Receive(data);
 			end
-		else if (control_in_bit == 1)
+		else if (control_in_bit == 3'b001)
 			begin
 				in2.Receive(data);
 			end
-		else if (control_in_bit == 2)
+		else if (control_in_bit == 3'b010)
 			begin
 				in3.Receive(data);
 			end
-		else if (control_in_bit == 3)
+		else if (control_in_bit == 3'b011)
 			begin
 				in4.Receive(data);
 			end
@@ -123,23 +123,23 @@ module router_merge (interface in1, interface in2, interface in3, interface in4,
 	logic [2:0] control_in_bit;
 	always begin
 		control_in.Receive(control_in_bit);
-		if (control_in_bit == 0) 
+		if (control_in_bit == 3'b000) 
 			begin
 				in1.Receive(data);
 			end
-		else if (control_in_bit == 1)
+		else if (control_in_bit == 3'b001)
 			begin
 				in2.Receive(data);
 			end
-		else if (control_in_bit == 2)
+		else if (control_in_bit == 3'b010)
 			begin
 				in3.Receive(data);
 			end
-		else if (control_in_bit == 3)
+		else if (control_in_bit == 3'b011)
 			begin
 				in4.Receive(data);
 			end
-		else if (control_in_bit == 4)
+		else if (control_in_bit == 3'b100)
 			begin
 				in5.Receive(data);
 			end
