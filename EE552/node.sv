@@ -51,7 +51,7 @@ module node(interface in1, interface in2, interface in3, interface in4,
 						 .core_control_out(core_control_intf[3]),
 						 .control_out1(data_control_intf3[0]), .control_out2(data_control_intf3[1]), .control_out3(data_control_intf3[2]), .control_out4(data_control_intf3[3]));
 
-	path_computation_module_4out #(.ADDR(MyIP)) pc4 (.in(core_data_to_arbiter),
+	path_computation_module_4out #(.ADDR(MyIP), .ID(4)) pc4 (.in(core_data_to_arbiter),
             			 .d_out2router1(data_to_merge0[4]), .d_out2router2(data_to_merge1[4]), .d_out2router3(data_to_merge2[4]), .d_out2router4(data_to_merge3[4]),
             			  .control_out1(data_control_intf4[0]), .control_out2(data_control_intf4[1]), .control_out3(data_control_intf4[2]), .control_out4(data_control_intf4[3]));
 

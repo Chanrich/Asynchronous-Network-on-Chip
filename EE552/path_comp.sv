@@ -27,6 +27,7 @@ module big_split (interface inPort, interface controlPort, interface core_output
     if(control == 3'b000 )
     begin 
       fork
+      control = ID;
       control_out1.Send(control);
       outPort1.Send(data);
       join
@@ -34,18 +35,21 @@ module big_split (interface inPort, interface controlPort, interface core_output
     else if(control == 3'b001)
     begin 
       fork
+      control = ID;
       control_out2.Send(control);
       outPort2.Send(data);
       join    end 
     else if(control == 3'b010)
     begin 
       fork
+        control = ID;
       control_out3.Send(control);
       outPort3.Send(data);
       join    end 
     else if(control == 3'b011)
     begin 
       fork
+      control = ID;
       control_out4.Send(control);
       outPort4.Send(data);
       join    end 
@@ -68,6 +72,8 @@ module big_split_no_core (interface inPort, interface controlPort,
   parameter FL = 1;
   parameter BL = 1;
   parameter WIDTH = 11;
+  parameter ID = 0;
+
   logic [WIDTH-1:0] data;
   logic [2:0] control; 
   always
@@ -84,6 +90,7 @@ module big_split_no_core (interface inPort, interface controlPort,
     if(control == 3'b000 )
     begin 
       fork
+      control = ID;
       control_out1.Send(control);
       outPort1.Send(data);
       join
@@ -91,18 +98,21 @@ module big_split_no_core (interface inPort, interface controlPort,
     else if(control == 3'b001)
     begin 
       fork
+      control = ID;
       control_out2.Send(control);
       outPort2.Send(data);
       join    end 
     else if(control == 3'b010)
     begin 
       fork
+        control = ID;
       control_out3.Send(control);
       outPort3.Send(data);
       join    end 
     else if(control == 3'b011)
     begin 
       fork
+      control = ID;
       control_out4.Send(control);
       outPort4.Send(data);
       join    
@@ -245,6 +255,8 @@ module path_computation_module_4out (interface in,
               interface control_out1, interface control_out2, interface control_out3, interface control_out4);
 
   parameter ADDR = 4'b0000;
+  parameter ID = 0;
+
   logic [3:0] addr_store;
   assign addr_store = ADDR;
   //Interface Vector instatiation: 4-phase bundled data channel
@@ -257,7 +269,7 @@ module path_computation_module_4out (interface in,
    //concatenate_module  #(.ADDR(ADDR)) cm(addr_in,d_in, out_intf, addr_intf[0] );
    concatenate_module  #(.ADDR(ADDR)) cm(.in(in), .out(out_intf), .control_router(control_router_intf));
 
-   big_split_no_core big_split (.inPort(out_intf), .controlPort(control_router_intf),
+   big_split_no_core #(.ID(ID))  big_split (.inPort(out_intf), .controlPort(control_router_intf),
                .outPort1(d_out2router1), .outPort2(d_out2router2), .outPort3(d_out2router3), .outPort4(d_out2router4),
               .control_out1(control_out1), .control_out2(control_out2), .control_out3(control_out3), .control_out4(control_out4)
               );
