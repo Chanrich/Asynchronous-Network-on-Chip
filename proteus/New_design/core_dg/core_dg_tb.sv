@@ -4,6 +4,7 @@
 //University of Southern California
 //Spring 2011
 `timescale 1ns/100ps
+import SystemVerilogCSP::*;
 module data_generator (interface R);
 
 	parameter W = 16;	

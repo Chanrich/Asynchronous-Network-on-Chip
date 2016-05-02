@@ -1,5 +1,6 @@
-`include "svc2rtl.sv"
-`E1OFN_M(2,11)
+import SystemVerilogCSP::*;
+//`include "svc2rtl.sv"
+//`E1OFN_M(2,11)
 
 module core_dg_csp_gold (interface dg_8b, interface data_out_11b);
 	logic [10:0] dg_data;
