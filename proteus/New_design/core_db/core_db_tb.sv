@@ -61,19 +61,19 @@ module core_db_cosim_tb;
 
 	reg _RESET ;
 	
-	e1ofN_M #(.N(2), .M(8)) A ();
-	e1ofN_M #(.N(2), .M(8)) A_CSP();
-	e1ofN_M #(.N(2), .M(8)) A_RTL();
+	e1ofN_M #(.N(2), .M(11)) A ();
+	e1ofN_M #(.N(2), .M(11)) A_CSP();
+	e1ofN_M #(.N(2), .M(11)) A_RTL();
 	e1ofN_M #(.N(2), .M(11)) Sum_CSP();
 	e1ofN_M #(.N(2), .M(11)) Sum_RTL();	
   
-	data_generator	#(.W(8)) dgI1 (.R(A));
-	copy		#(.W(8)) cpdgI1 (.L(A), .R1(A_CSP), .R2(A_RTL));
+	data_generator	#(.W(11)) dgI1 (.R(A));
+	copy		#(.W(11)) cpdgI1 (.L(A), .R1(A_CSP), .R2(A_RTL));
 
 	
-	core_db_csp_gold		u_core_db_csp	(.db_8b(A_CSP), .data_in_11b(Sum_CSP));
+	core_db_csp_gold		u_core_db_csp	(.db8b(A_CSP), .datain11b(Sum_CSP));
 		
-	core_db_cosim_wrapper u_core_db_rtl (.db_8b(A_RTL), .data_in_11b(Sum_RTL) , ._RESET(_RESET));
+	core_db_cosim_wrapper u_core_db_rtl (.db8b(A_RTL), .datain11b(Sum_RTL) , ._RESET(_RESET));
 	
 	cosim_checker	#(.W(11))	cc	(.L1(Sum_CSP), .L2(Sum_RTL));
 	

@@ -1,5 +1,5 @@
 #!/bin/tcsh
-set design = merge
+set design = routermerge
 if ( $1 == "skip" ) goto compile 
 echo "Checking Syntax of The Input File Using vlog ..."   
 vlib work

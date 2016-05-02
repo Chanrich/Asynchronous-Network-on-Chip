@@ -66,21 +66,21 @@ module edu_cosim_tb;
 
 	reg _RESET ;
 	
-	e1ofN_M #(.N(2), .M(7)) A ();
-	e1ofN_M #(.N(2), .M(7)) A_CSP();
-	e1ofN_M #(.N(2), .M(7)) A_RTL();
-	e1ofN_M #(.N(2), .M(7)) Sum_CSP();
-	e1ofN_M #(.N(2), .M(7)) Sum_RTL();	
+	e1ofN_M #(.N(2), .M(11)) A ();
+	e1ofN_M #(.N(2), .M(11)) A_CSP();
+	e1ofN_M #(.N(2), .M(11)) A_RTL();
+	e1ofN_M #(.N(2), .M(11)) Sum_CSP();
+	e1ofN_M #(.N(2), .M(11)) Sum_RTL();	
   
-	data_generator	#(.W(7)) dgI1 (.R(A));
-	copy		#(.W(7)) cpdgI1 (.L(A), .R1(A_CSP), .R2(A_RTL));
+	data_generator	#(.W(11)) dgI1 (.R(A));
+	copy		#(.W(11)) cpdgI1 (.L(A), .R1(A_CSP), .R2(A_RTL));
 
 	
-	edu_csp_gold		u_ecu_csp	(.datain(A_CSP), .dataout(Sum_CSP));
+	edu_csp_gold		u_edu_csp	(.datain(A_CSP), .dataout(Sum_CSP));
 		
-	edu_cosim_wrapper u_ecu_rtl (.datain(A_RTL), .dataout(Sum_RTL) , ._RESET(_RESET));
+	edu_cosim_wrapper u_edu_rtl (.datain(A_RTL), .dataout(Sum_RTL) , ._RESET(_RESET));
 	
-	cosim_checker	#(.W(7))	cc	(.L1(Sum_CSP), .L2(Sum_RTL));
+	cosim_checker	#(.W(11))	cc	(.L1(Sum_CSP), .L2(Sum_RTL));
 	
 	initial 
 	begin : reset

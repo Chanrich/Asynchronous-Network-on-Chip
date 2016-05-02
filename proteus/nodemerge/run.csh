@@ -1,5 +1,5 @@
 #!/bin/tcsh
-set design = core_dg
+set design = nodemerge
 if ( $1 == "skip" ) goto compile 
 echo "Checking Syntax of The Input File Using vlog ..."   
 vlib work
