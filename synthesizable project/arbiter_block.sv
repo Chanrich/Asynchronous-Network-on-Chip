@@ -1,6 +1,5 @@
-`timescale 1ns/100ps
-import SystemVerilogCSP::*;
-
+`include "svc2rtl.sv"
+`E1OFN_M(2,3)
 
 module arbiter2 (interface in0, interface in1, interface out);
 	parameter FL = 2;
@@ -52,7 +51,7 @@ endmodule // arbiter2in
 module input_arbiter_5_3bit(interface in1, interface in2, interface in3, interface in4,
 							interface in5, interface data_out);
 	// inputs take 11 bits
-	Channel #(.hsProtocol(P4PhaseBD), .WIDTH(3)) data_intf[2:0] (); 
+	e1ofN_M #(.N(2), .M(3)) data_intf[2:0] (); 
 
 	arbiter2 #(.FL(0), .BL(0), .WIDTH(3)) ar1(.in0(in1), .in1(in2), .out(data_intf[0]));
 	arbiter2 #(.FL(0), .BL(0), .WIDTH(3)) ar2(.in0(in3), .in1(in4), .out(data_intf[2]));
@@ -64,7 +63,7 @@ endmodule
 
 module input_arbiter_4_3bit(interface in1, interface in2, interface in3, interface in4, interface data_out);
 	// inputs take 11 bits
-	Channel #(.hsProtocol(P4PhaseBD), .WIDTH(3)) data_intf[1:0] (); 
+	e1ofN_M #(.N(2), .M(3)) data_intf[1:0] (); 
 
 	arbiter2 #(.FL(0), .BL(0), .WIDTH(3)) ar1(.in0(in1), .in1(in2), .out(data_intf[0]));
 	arbiter2 #(.FL(0), .BL(0), .WIDTH(3)) ar2(.in0(in3), .in1(in4), .out(data_intf[1]));

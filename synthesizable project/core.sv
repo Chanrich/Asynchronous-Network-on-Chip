@@ -1,5 +1,4 @@
-`timescale 1ns/100ps
-import SystemVerilogCSP::*;
+`include "svc2rtl.sv"
 
 module core (interface dg_8b, interface db_8b, interface data_out_11b, interface data_in_11b);
     parameter FL = 0;

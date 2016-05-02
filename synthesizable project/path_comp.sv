@@ -1,7 +1,5 @@
-`timescale 1ns/1fs
+`timescale 1ns/100ps
 //NOTE: you need to compile SystemVerilogCSP.sv as well
-import SystemVerilogCSP::*;
-
 module big_split (interface inPort, interface controlPort, interface core_output, interface core_control_out,
                interface outPort1, interface outPort2, interface outPort3, interface outPort4,
                 interface control_out1, interface control_out2, interface control_out3, interface control_out4);
@@ -151,32 +149,6 @@ module concatenate_module (interface in, interface out, interface control_router
     #FL; 
     addr = inData[3:0];
     data = inData[10:4];
-/*
-    // Error detection and correction
-    P1 = data[0] ^ data[2] ^ data[4] ^ data[6];
-    P2 = data[1] ^ data[2] ^ data[5] ^ data[6];
-    P4 = data[3] ^ data[4] ^ data[5] ^ data[6];
-    parity_bit = 0;
-    if (P1 == 1)
-    begin
-      parity_bit = parity_bit + 1;
-    end
-    if (P2 == 1) 
-    begin
-      parity_bit = parity_bit + 2;
-    end
-    if (P4 == 1) 
-    begin
-      parity_bit = parity_bit + 4;
-    end
-    if (parity_bit != 0) 
-    begin
-      data[parity_bit-1] = ~data[parity_bit-1];
-    end
-
-*/
-
-
     for(int i =0; i<4; i++)
     begin 
       xor_result[i] = addr[i] ^ ADDR[i];
@@ -221,6 +193,16 @@ module concatenate_module (interface in, interface out, interface control_router
   end
 endmodule 
 
+
+module full_buffer(interface L, interface R);
+  logic[10:0] data;
+  always begin
+    L.Receive(data);
+    R.Send(data);
+  end
+
+endmodule
+
 module path_computation_module (interface in, interface d_out2core, interface core_control_out,
              interface d_out2router1, interface d_out2router2, interface d_out2router3, interface d_out2router4,
               interface control_out1, interface control_out2, interface control_out3, interface control_out4);
@@ -231,39 +213,34 @@ module path_computation_module (interface in, interface d_out2core, interface co
   reg _RESET;
   assign addr_store = ADDR;
   //Interface Vector instatiation: 4-phase bundled data channel
-  Channel #(.WIDTH(7), .hsProtocol(P4PhaseBD)) data_intf  [1:0] (); 
-  Channel #(.WIDTH(4), .hsProtocol(P4PhaseBD)) addr_intf  [1:0] (); 
-  Channel #(.WIDTH(11), .hsProtocol(P4PhaseBD)) out_intf (); 
-  Channel #(.WIDTH(11), .hsProtocol(P4PhaseBD)) edu_intf (); 
-  Channel #(.WIDTH(3), .hsProtocol(P4PhaseBD)) control_router_intf  (); 
-  Channel #(.WIDTH(1), .hsProtocol(P4PhaseBD)) control_core_intf  (); 
+  e1ofN_M #(.N(2), .M(4)) addr_intf  [1:0] (); 
+  e1ofN_M #(.N(2), .M(11)) out_intf (); 
+  e1ofN_M #(.N(2), .M(11)) edu_intf (); 
+  e1ofN_M #(.N(2), .M(11)) buf_intf [1:0] (); 
+  e1ofN_M #(.N(2), .M(3)) control_router_intf  (); 
+  e1ofN_M #(.N(2), .M(1)) control_core_intf  (); 
   
-
-    edu_cosim_wrapper u_edu_rtl ( .datain(in), .dataout(edu_intf), ._RESET(_RESET));
+  full_buffer full_buffer1(.L(in), .R(buf_intf[0]));
+  full_buffer full_buffer2(.L(edu_intf), .R(buf_intf[1]));
+    edu_cosim_wrapper u_edu_rtl ( .datain(buf_intf[0]), .dataout(edu_intf), ._RESET(_RESET));
    //concatenate_module  #(.ADDR(ADDR)) cm(addr_in,d_in, out_intf, addr_intf[0] );
-   concatenate_module  #(.ADDR(ADDR)) cm(.in(edu_intf), .out(out_intf), .control_router(control_router_intf));
+   concatenate_module  #(.ADDR(ADDR)) cm(.in(buf_intf[1]), .out(out_intf), .control_router(control_router_intf));
 
    big_split #(.ID(ID))  big_split (.inPort(out_intf), .controlPort(control_router_intf), .core_output(d_out2core), .core_control_out(core_control_out),
                .outPort1(d_out2router1), .outPort2(d_out2router2), .outPort3(d_out2router3), .outPort4(d_out2router4),
               .control_out1(control_out1), .control_out2(control_out2), .control_out3(control_out3), .control_out4(control_out4)
               );
-   //split_2 s2core(out_intf[0], control_core_intf[0], out_intf[1], d_out2core);
-   //split_4 s2router(out_intf[1], control_router_intf[0], d_out2router1, d_out2router2, d_out2router3, d_out2router4);
-
    initial 
-  begin : reset
-  
-    _RESET = 0;
-    in.d_log= '0;
-    
+     begin : reset
+      _RESET = 0;
+    buf_intf[0].d_log = '0;    
+    edu_intf.e_log = '0;
     #400;  
-    
-    _RESET =  1;
+    _RESET = 1;
     edu_intf.e_log = '1;
-
-  end
-
+   end
 endmodule
+
 
 module path_computation_module_4out (interface in,
              interface d_out2router1, interface d_out2router2, interface d_out2router3, interface d_out2router4,
@@ -272,44 +249,36 @@ module path_computation_module_4out (interface in,
   parameter ADDR = 4'b0000;
   parameter ID = 3'b000;
 
-  reg _RESET;
   logic [3:0] addr_store;
+  reg _RESET;
   assign addr_store = ADDR;
   //Interface Vector instatiation: 4-phase bundled data channel
-  Channel #(.WIDTH(7), .hsProtocol(P4PhaseBD)) data_intf  [1:0] (); 
-  Channel #(.WIDTH(4), .hsProtocol(P4PhaseBD)) addr_intf  [1:0] (); 
-  Channel #(.WIDTH(11), .hsProtocol(P4PhaseBD)) out_intf (); 
-  Channel #(.WIDTH(11), .hsProtocol(P4PhaseBD)) edu_intf (); 
-  Channel #(.WIDTH(3), .hsProtocol(P4PhaseBD)) control_router_intf  (); 
-  Channel #(.WIDTH(1), .hsProtocol(P4PhaseBD)) control_core_intf  (); 
+  e1ofN_M #(.N(2), .M(4)) addr_intf  [1:0] (); 
+  e1ofN_M #(.N(2), .M(11)) out_intf (); 
+  e1ofN_M #(.N(2), .M(11)) edu_intf (); 
+  e1ofN_M #(.N(2), .M(11)) buf_intf [1:0] (); 
+  e1ofN_M #(.N(2), .M(3)) control_router_intf  (); 
+  e1ofN_M #(.N(2), .M(1)) control_core_intf  (); 
   
-  
-    edu_cosim_wrapper u_edu_rtl ( .datain(in), .dataout(edu_intf), ._RESET(_RESET));
+  full_buffer full_buffer1(.L(in), .R(buf_intf[0]));
+  full_buffer full_buffer2(.L(edu_intf), .R(buf_intf[1]));
+    edu_cosim_wrapper u_edu_rtl ( .datain(buf_intf[0]), .dataout(edu_intf), ._RESET(_RESET));
    //concatenate_module  #(.ADDR(ADDR)) cm(addr_in,d_in, out_intf, addr_intf[0] );
-   concatenate_module  #(.ADDR(ADDR)) cm(.in(edu_intf), .out(out_intf), .control_router(control_router_intf));
+   concatenate_module  #(.ADDR(ADDR)) cm(.in(buf_intf[1]), .out(out_intf), .control_router(control_router_intf));
 
    big_split_no_core #(.ID(ID))  big_split (.inPort(out_intf), .controlPort(control_router_intf),
                .outPort1(d_out2router1), .outPort2(d_out2router2), .outPort3(d_out2router3), .outPort4(d_out2router4),
               .control_out1(control_out1), .control_out2(control_out2), .control_out3(control_out3), .control_out4(control_out4)
               );
-   //split_2 s2core(out_intf[0], control_core_intf[0], out_intf[1], d_out2core);
-   //split_4 s2router(out_intf[1], control_router_intf[0], d_out2router1, d_out2router2, d_out2router3, d_out2router4);
-
-
   initial 
-  begin : reset
-  
+     begin : reset
     _RESET = 0;
-    in.d_log= '0;
-    
-    #400;  
-    
-    _RESET =  1;
+    buf_intf[0].d_log = '0;    
+    edu_intf.e_log = '0;
+    #300;  
+    _RESET = 1;
     edu_intf.e_log = '1;
-
-  end
-
-
+   end
 endmodule
 
 

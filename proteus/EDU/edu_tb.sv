@@ -60,6 +60,15 @@ module cosim_checker (interface L1, interface L2);
 	end
 endmodule
 
+module full_buffer(interface L, interface R);
+  logic[10:0] data;
+  always begin
+    L.Receive(data);
+    R.Send(data);
+  end
+
+endmodule
+
 module edu_cosim_tb;
 
 	parameter W = 7;
@@ -68,31 +77,32 @@ module edu_cosim_tb;
 	
 	e1ofN_M #(.N(2), .M(11)) A ();
 	e1ofN_M #(.N(2), .M(11)) A_CSP();
-	e1ofN_M #(.N(2), .M(11)) A_RTL();
+	e1ofN_M #(.N(2), .M(11)) A_RTL [1:0]();
 	e1ofN_M #(.N(2), .M(11)) Sum_CSP();
-	e1ofN_M #(.N(2), .M(11)) Sum_RTL();	
+	e1ofN_M #(.N(2), .M(11)) Sum_RTL [1:0]();	
   
 	data_generator	#(.W(11)) dgI1 (.R(A));
-	copy		#(.W(11)) cpdgI1 (.L(A), .R1(A_CSP), .R2(A_RTL));
+	copy		#(.W(11)) cpdgI1 (.L(A), .R1(A_CSP), .R2(A_RTL[0]));
 
 	
 	edu_csp_gold		u_edu_csp	(.datain(A_CSP), .dataout(Sum_CSP));
-		
-	edu_cosim_wrapper u_edu_rtl (.datain(A_RTL), .dataout(Sum_RTL) , ._RESET(_RESET));
+	full_buffer f1(.L(A_RTL[0]), .R(A_RTL[1]));
+	full_buffer f2(.L(Sum_RTL[0]), .R(Sum_RTL[1]));
+	edu_cosim_wrapper u_edu_rtl (.datain(A_RTL[1]), .dataout(Sum_RTL[0]) , ._RESET(_RESET));
 	
-	cosim_checker	#(.W(11))	cc	(.L1(Sum_CSP), .L2(Sum_RTL));
+	cosim_checker	#(.W(11))	cc	(.L1(Sum_CSP), .L2(Sum_RTL[1]));
 	
 	initial 
 	begin : reset
 	
 		_RESET = 0;
-		A_RTL.d_log= '0;
-		Sum_RTL.e_log = '0;
+		A_RTL[1].d_log= '0;
+		Sum_RTL[0].e_log = '0;
 		
 		#400;  
 		
 		_RESET =  1;
-		Sum_RTL.e_log = '1;
+		Sum_RTL[0].e_log = '1;
 
 	end
 	

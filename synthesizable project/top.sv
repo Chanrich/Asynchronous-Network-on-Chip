@@ -1,12 +1,16 @@
 `timescale 1ns/100ps
-import SystemVerilogCSP::*;
+`include "svc2rtl.sv"
+`E1OFN_M(2,11)
+`E1OFN_M(2,8)
+`E1OFN_M(2,7)
+`E1OFN_M(2,4)
+`E1OFN_M(2,3)
 
+module top (interface dg_in [15:0], interface db_out [15:0], input _RESET);
 
-module top (interface dg_in [15:0], interface db_out [15:0]);
-
-	Channel #(.WIDTH(11), .hsProtocol(P4PhaseBD)) data_intf_1  [23:0] (); 
-	Channel #(.WIDTH(11), .hsProtocol(P4PhaseBD)) data_intf_2  [23:0] (); 
-	Channel #(.WIDTH(11), .hsProtocol(P4PhaseBD)) data_intf_3  [15:0] (); 
+	e1ofN_M #(.N(2), .M(11)) data_intf_1  [23:0] (); 
+	e1ofN_M #(.N(2), .M(11)) data_intf_2  [23:0] (); 
+	e1ofN_M #(.N(2), .M(11)) data_intf_3  [15:0] (); 
 
 
 	node #(.MyIP(4'b0000)) n1  (.in1(data_intf_1[1]), .in2(data_intf_1[3]), .in3(data_intf_1[5]), .in4(data_intf_3[1]), 
@@ -74,64 +78,4 @@ module top (interface dg_in [15:0], interface db_out [15:0]);
 	 .db(db_out[15]), .dg(dg_in[15]));
 
 
-endmodule
-
-
-module data_bucket_top_tb (interface r);
-  parameter WIDTH = 8;
-  parameter BL = 0; //ideal environment
-  logic [WIDTH-1:0] ReceiveValue = 0;
-  always
-  begin
-    r.Receive(ReceiveValue);
-  end
-endmodule
-
-module top_tb;
-	Channel #(.WIDTH(8), .hsProtocol(P4PhaseBD)) dg_intf  [15:0] (); 
-	Channel #(.WIDTH(8), .hsProtocol(P4PhaseBD)) db_intf  [15:0] (); 
-	top t1 (.dg_in(dg_intf[15:0]), .db_out(db_intf[15:0]));
-
-	data_bucket_top_tb data_bucket_top_tb1(.r(db_intf[0]));
-	data_bucket_top_tb data_bucket_top_tb2(.r(db_intf[1]));
-	data_bucket_top_tb data_bucket_top_tb3(.r(db_intf[2]));
-	data_bucket_top_tb data_bucket_top_tb4(.r(db_intf[3]));
-	data_bucket_top_tb data_bucket_top_tb5(.r(db_intf[4]));
-	data_bucket_top_tb data_bucket_top_tb6(.r(db_intf[5]));
-	data_bucket_top_tb data_bucket_top_tb7(.r(db_intf[6]));
-	data_bucket_top_tb data_bucket_top_tb8(.r(db_intf[7]));	
-	data_bucket_top_tb data_bucket_top_tb9(.r(db_intf[8]));
-	data_bucket_top_tb data_bucket_top_tb10(.r(db_intf[9]));
-	data_bucket_top_tb data_bucket_top_tb11(.r(db_intf[10]));
-	data_bucket_top_tb data_bucket_top_tb12(.r(db_intf[11]));
-	data_bucket_top_tb data_bucket_top_tb13(.r(db_intf[12]));
-	data_bucket_top_tb data_bucket_top_tb14(.r(db_intf[13]));
-	data_bucket_top_tb data_bucket_top_tb15(.r(db_intf[14]));
-	data_bucket_top_tb data_bucket_top_tb16(.r(db_intf[15]));
-
-	initial begin
-		dg_intf[0].Send(8'b00010001);
-		#20;
-		dg_intf[0].Send(8'b00100011);
-		#20;
-		dg_intf[0].Send(8'b00110111);
-		#20;
-		dg_intf[0].Send(8'b01001111);
-		#20;
-		dg_intf[0].Send(8'b01011111);
-		#20;
-		dg_intf[1].Send(8'b01100000);
-		#20;
-		dg_intf[1].Send(8'b01110011);
-		#20;
-		dg_intf[1].Send(8'b10000111);
-		#20;
-		dg_intf[1].Send(8'b10011111);
-		#20;
-		dg_intf[15].Send(8'b10100000);
-		#20;
-		dg_intf[14].Send(8'b10110000);
-		#20;
-		dg_intf[13].Send(8'b11000000);
-	end
 endmodule
