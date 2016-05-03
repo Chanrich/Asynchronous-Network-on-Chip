@@ -1,5 +1,6 @@
+`include "svc2rtl.sv"
+`E1OFN_M(2,11)
 `timescale 1ns/100ps
-
 module full_buffer_node(interface L, interface R);
   logic[10:0] data;
   always begin
@@ -17,18 +18,17 @@ module node(interface in1, interface in2, interface in3, interface in4,
 	parameter MyIP = 0;
 	reg _RESET;
 	e1ofN_M #(.N(2), .M(11)) core_data_to_arbiter(); 
-	e1ofN_M #(.N(2), .M(11)) arbiter_out (); 
-	e1ofN_M #(.N(2), .M(7))  data_intf1  [1:0] (); 
-    e1ofN_M #(.N(2), .M(4))  addr_intf1  [1:0] (); 
+	e1ofN_M #(.N(2), .M(11)) core_data_to_arbiter_buf(); 
     e1ofN_M #(.N(2), .M(11)) data_11b [4:0] (); 
-    e1ofN_M #(.N(2), .M(11)) data_11b_2(); 
+    // e1ofN_M #(.N(2), .M(11)) data_11b_2(); 
     e1ofN_M #(.N(2), .M(3))  core_control_intf[4:0] (); 
     e1ofN_M #(.N(2), .M(3))  router_control_intf[3:0] (); 
-    e1ofN_M #(.N(2), .M(3))  data_control_intf0[4:0] (); 
-    e1ofN_M #(.N(2), .M(3))  data_control_intf1[4:0] (); 
-    e1ofN_M #(.N(2), .M(3))  data_control_intf2[4:0] (); 
-    e1ofN_M #(.N(2), .M(3))  data_control_intf3[4:0] (); 
-    e1ofN_M #(.N(2), .M(3))  data_control_intf4[4:0] (); 
+    e1ofN_M #(.N(2), .M(3))  data_control_intf0[3:0] (); 
+    e1ofN_M #(.N(2), .M(3))  data_control_intf1[3:0] (); 
+    e1ofN_M #(.N(2), .M(3))  data_control_intf2[3:0] (); 
+    e1ofN_M #(.N(2), .M(3))  data_control_intf3[3:0] (); 
+    e1ofN_M #(.N(2), .M(3))  data_control_intf4[3:0] (); 
+    e1ofN_M #(.N(2), .M(11))  dg_buf (); 
 
 	e1ofN_M #(.N(2), .M(11)) data_to_merge0 [4:0] (); 
 	e1ofN_M #(.N(2), .M(11)) data_to_merge1 [4:0] (); 
@@ -36,11 +36,12 @@ module node(interface in1, interface in2, interface in3, interface in4,
 	e1ofN_M #(.N(2), .M(11)) data_to_merge3 [4:0] (); 
 	e1ofN_M #(.N(2), .M(11)) data_to_merge4 [4:0] (); 
 
-
-	core_db_cosim_wrapper core_db_wrap (.db8b(db), .datain11b(data_11b_2), ._RESET(_RESET));
-	core_dg_cosim_wrapper core_dg_wrap (.dg_8b(dg), .data_out_11b(core_data_to_arbiter), ._RESET(_RESET));
-	//core core1 (.dg_8b(dg), .db_8b(db), .data_out_11b(core_data_to_arbiter), .data_in_11b(data_11b[4]));
-	full_buffer_node full_buffer_node1(.L(data_11b[4]), .R(data_11b_2));
+	// full_buffer_node full_buffer_node1(.L(dg), .R(dg_buf));
+	// full_buffer_node full_buffer_node2(.L(core_data_to_arbiter), .R(core_data_to_arbiter_buf));
+	// core_db_csp_gold core_db_wrap (.db8b(db), .datain11b(data_11b[4]));
+	// core_dg_csp_gold core_dg_wrap (.dg_8b(dg), .data_out_11b(core_data_to_arbiter));
+	core core1 (.dg_8b(dg), .db_8b(db), .data_out_11b(core_data_to_arbiter), .data_in_11b(data_11b[4]));
+	//full_buffer_node full_buffer_node1(.L(data_11b[4]), .R(data_11b_2));
 	path_computation_module #(.ADDR(MyIP), .ID(3'b000)) pc0 (.in(in1), .d_out2core(data_11b[0]),
 						 .d_out2router1(data_to_merge0[0]), .d_out2router2(data_to_merge1[0]), .d_out2router3(data_to_merge2[0]), .d_out2router4(data_to_merge3[0]),
 						 .core_control_out(core_control_intf[0]),
@@ -108,12 +109,20 @@ routermerge_cosim_wrapper router_merge_wrap3 (.in1(data_to_merge3[0]), .in2(data
 
 		initial begin
 		    _RESET = 0;
-		    dg.d_log = '0;    
+		    // dg_buf.d_log = '0;   
+		    // data_11b[4].d_log = '0; 
+
+		    // // Send
+		    // core_data_to_arbiter.e_log = '0;
+		    // db.e_log = '0;
+		    // Node merge
 		    data_11b[0].d_log = '0;    
 		    data_11b[1].d_log = '0;    
 		    data_11b[2].d_log = '0;  
 		    data_11b[3].d_log = '0;  
 		    core_control_intf[4].d_log = '0;
+
+		    // Router Merge 1
 		    router_control_intf[0].d_log = '0;
 		    router_control_intf[1].d_log = '0;
 		    router_control_intf[2].d_log = '0;
@@ -138,25 +147,88 @@ routermerge_cosim_wrapper router_merge_wrap3 (.in1(data_to_merge3[0]), .in2(data
 		    data_to_merge3[2].d_log = '0;
 		    data_to_merge3[3].d_log = '0;
 		    data_to_merge3[4].d_log = '0;
-		    data_11b_2.d_log = '0;
 
-		    core_data_to_arbiter.e_log = '0;
-		    db.e_log = '0;
+
 		    data_11b[4].e_log = '0;
 		    out1.e_log = '0;
 		    out2.e_log = '0;
 		    out3.e_log = '0;
 		    out4.e_log = '0;
-		    #300;  
+		    #400;  
 		    _RESET = 1;
-		    core_data_to_arbiter.e_log = '1;
-		    db.e_log = '1;
+		    // Node merge
 		    data_11b[4].e_log = '1;
+		    // Router 1
 		    out1.e_log = '1;
 		    out2.e_log = '1;
 		    out3.e_log = '1;
 		    out4.e_log = '1;
+		    // core_data_to_arbiter.e_log = '1;
+		    // db.e_log = '1;
 
 		end
 endmodule // node
 
+module node_merge (interface in1, interface in2, interface in3, interface in4, interface control_in, interface out);
+	parameter FL = 1;
+	parameter BL = 1;
+	logic [10:0] data;
+	logic [2:0] control_in_bit;
+	always begin
+		control_in.Receive(control_in_bit);
+		if (control_in_bit == 3'b000) 
+			begin
+				in1.Receive(data);
+			end
+		else if (control_in_bit == 3'b001)
+			begin
+				in2.Receive(data);
+			end
+		else if (control_in_bit == 3'b010)
+			begin
+				in3.Receive(data);
+			end
+		else if (control_in_bit == 3'b011)
+			begin
+				in4.Receive(data);
+			end
+
+		#FL;
+		out.Send(data);
+		#BL;
+	end
+endmodule
+
+module router_merge (interface in1, interface in2, interface in3, interface in4, interface in5, interface control_in, interface out);
+	parameter FL = 1;
+	parameter BL = 1;
+	logic [10:0] data;
+	logic [2:0] control_in_bit;
+	always begin
+		control_in.Receive(control_in_bit);
+		if (control_in_bit == 3'b000) 
+			begin
+				in1.Receive(data);
+			end
+		else if (control_in_bit == 3'b001)
+			begin
+				in2.Receive(data);
+			end
+		else if (control_in_bit == 3'b010)
+			begin
+				in3.Receive(data);
+			end
+		else if (control_in_bit == 3'b011)
+			begin
+				in4.Receive(data);
+			end
+		else if (control_in_bit == 3'b100)
+			begin
+				in5.Receive(data);
+			end
+
+		#FL;
+		out.Send(data);
+		#BL;
+	end
+endmodule

@@ -1,12 +1,7 @@
-`timescale 1ns/100ps
 `include "svc2rtl.sv"
-`E1OFN_M(2,11)
-`E1OFN_M(2,8)
-`E1OFN_M(2,7)
-`E1OFN_M(2,4)
-`E1OFN_M(2,3)
+`timescale 1ns/100ps
 
-module top (interface dg_in [15:0], interface db_out [15:0], input _RESET);
+module top (interface dg_in [15:0], interface db_out [15:0]);
 
 	e1ofN_M #(.N(2), .M(11)) data_intf_1  [23:0] (); 
 	e1ofN_M #(.N(2), .M(11)) data_intf_2  [23:0] (); 

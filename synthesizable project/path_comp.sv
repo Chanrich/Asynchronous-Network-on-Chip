@@ -10,7 +10,6 @@ module big_split (interface inPort, interface controlPort, interface core_output
   logic [WIDTH-1:0] data;
   logic [2:0] control;
   logic [2:0] mydata_id; 
-  logic core_control_select; 
   logic [2:0] output_control; 
   always
   begin
@@ -209,21 +208,16 @@ module path_computation_module (interface in, interface d_out2core, interface co
 
   parameter ADDR = 4'b0000;
   parameter ID = 3'b000;
-  logic [3:0] addr_store;
   reg _RESET;
-  assign addr_store = ADDR;
   //Interface Vector instatiation: 4-phase bundled data channel
-  e1ofN_M #(.N(2), .M(4)) addr_intf  [1:0] (); 
   e1ofN_M #(.N(2), .M(11)) out_intf (); 
   e1ofN_M #(.N(2), .M(11)) edu_intf (); 
   e1ofN_M #(.N(2), .M(11)) buf_intf [1:0] (); 
   e1ofN_M #(.N(2), .M(3)) control_router_intf  (); 
-  e1ofN_M #(.N(2), .M(1)) control_core_intf  (); 
   
   full_buffer full_buffer1(.L(in), .R(buf_intf[0]));
   full_buffer full_buffer2(.L(edu_intf), .R(buf_intf[1]));
     edu_cosim_wrapper u_edu_rtl ( .datain(buf_intf[0]), .dataout(edu_intf), ._RESET(_RESET));
-   //concatenate_module  #(.ADDR(ADDR)) cm(addr_in,d_in, out_intf, addr_intf[0] );
    concatenate_module  #(.ADDR(ADDR)) cm(.in(buf_intf[1]), .out(out_intf), .control_router(control_router_intf));
 
    big_split #(.ID(ID))  big_split (.inPort(out_intf), .controlPort(control_router_intf), .core_output(d_out2core), .core_control_out(core_control_out),
@@ -249,21 +243,16 @@ module path_computation_module_4out (interface in,
   parameter ADDR = 4'b0000;
   parameter ID = 3'b000;
 
-  logic [3:0] addr_store;
   reg _RESET;
-  assign addr_store = ADDR;
   //Interface Vector instatiation: 4-phase bundled data channel
-  e1ofN_M #(.N(2), .M(4)) addr_intf  [1:0] (); 
   e1ofN_M #(.N(2), .M(11)) out_intf (); 
   e1ofN_M #(.N(2), .M(11)) edu_intf (); 
   e1ofN_M #(.N(2), .M(11)) buf_intf [1:0] (); 
   e1ofN_M #(.N(2), .M(3)) control_router_intf  (); 
-  e1ofN_M #(.N(2), .M(1)) control_core_intf  (); 
   
   full_buffer full_buffer1(.L(in), .R(buf_intf[0]));
   full_buffer full_buffer2(.L(edu_intf), .R(buf_intf[1]));
     edu_cosim_wrapper u_edu_rtl ( .datain(buf_intf[0]), .dataout(edu_intf), ._RESET(_RESET));
-   //concatenate_module  #(.ADDR(ADDR)) cm(addr_in,d_in, out_intf, addr_intf[0] );
    concatenate_module  #(.ADDR(ADDR)) cm(.in(buf_intf[1]), .out(out_intf), .control_router(control_router_intf));
 
    big_split_no_core #(.ID(ID))  big_split (.inPort(out_intf), .controlPort(control_router_intf),
@@ -275,7 +264,7 @@ module path_computation_module_4out (interface in,
     _RESET = 0;
     buf_intf[0].d_log = '0;    
     edu_intf.e_log = '0;
-    #300;  
+    #400;  
     _RESET = 1;
     edu_intf.e_log = '1;
    end

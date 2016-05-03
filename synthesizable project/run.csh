@@ -31,8 +31,12 @@ vlog core_db.qdi.noclk.flat.cosim.sv +incdir+$PROTEUS_PDK_PATH
 vlog core_dg.qdi.noclk.flat.cosim.sv +incdir+$PROTEUS_PDK_PATH
 vlog nodemerge.qdi.noclk.flat.cosim.sv +incdir+$PROTEUS_PDK_PATH
 vlog routermerge.qdi.noclk.flat.cosim.sv +incdir+$PROTEUS_PDK_PATH
+## vlog routermerge_csp_gold.sv +incdir+$PROTEUS_PDK_PATH
 vlog arbiter_block.sv +incdir+$PROTEUS_PDK_PATH
 ## vlog core.sv +incdir+$PROTEUS_PDK_PATH
+vlog core_db_csp_gold.sv +incdir+$PROTEUS_PDK_PATH
+vlog core_dg_csp_gold.sv +incdir+$PROTEUS_PDK_PATH
+vlog core.sv +incdir+$PROTEUS_PDK_PATH
 vlog path_comp.sv +incdir+$PROTEUS_PDK_PATH
 vlog node.sv +incdir+$PROTEUS_PDK_PATH
 vlog top.sv  +incdir+$PROTEUS_PDK_PATH

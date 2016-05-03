@@ -56,7 +56,7 @@ module data_bucket_top_tb (interface r);
 
   initial
   begin
-    #300;
+    #500;
     forever begin
       //Save the simulation time when Receive starts
       r.Receive(ReceiveValue);
@@ -98,7 +98,6 @@ module tb_module;
   reg [15:0] time_queue [16] [$];
   reg [7:0] data_queue [16] [$];
   integer cycle_queue [16];
-  reg _RESET;
   real sum_travel_time [16];
   real throughput [16];
   real total_throughput;
@@ -109,8 +108,6 @@ module tb_module;
   //integer fp_original;
 
 
-  e1ofN_M #(.N(2), .M(8)) data_intf  [1:0] (); 
-  e1ofN_M #(.N(2), .M(4)) control_intf  [1:0] (); 
   e1ofN_M #(.N(2), .M(8)) intf2core  [15:0] (); 
   e1ofN_M #(.N(2), .M(8)) db_intf[15:0]  (); 
 
@@ -134,7 +131,7 @@ module tb_module;
   data_generator #(.MYID(15)) dg15(intf2core[15]);
 
 
-  top top1 (.dg_in(intf2core[15:0]), .db_out(db_intf[15:0]), ._RESET(_RESET));
+  top top1 (.dg_in(intf2core[15:0]), .db_out(db_intf[15:0]));
   data_bucket_top_tb #(.MYID(0)) db0000(db_intf[0]);
   data_bucket_top_tb #(.MYID(1)) db0001(db_intf[1]);
   data_bucket_top_tb #(.MYID(2)) db0010(db_intf[2]);
@@ -159,7 +156,6 @@ initial
     // initialize 
     receive_count = 0;
     error_flag = 0;
-    //_RESET = 0;
     total_send = 0;
     total_travel_time = 0;
     for (int i=0; i < 16; i++)begin
@@ -168,7 +164,6 @@ initial
       throughput[i] = 0;
     end
     #400;
-    //_RESET = 1;
     $display("Waiting for receivers");
     wait ((receive_count > 0) && (receive_count == total_send));
     $display("Received: %d",receive_count);
