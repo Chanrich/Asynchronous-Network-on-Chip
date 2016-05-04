@@ -1,6 +1,6 @@
 #!/bin/tcsh
-set design = edu
-if ( $1 == "skip") goto compile
+set design = routermerge
+if ( $1 == "skip" ) goto compile 
 echo "Checking Syntax of The Input File Using vlog ..."   
 vlib work
 vlog ${design}_csp.sv +incdir+$PROTEUS_PDK_PATH
@@ -26,22 +26,12 @@ echo "Reading total number of gates in RC results"
 grep -C 5 "START: generating verilog" *.qdi/*rc.out | grep total
 compile:
 echo "Compiling the post synthesis top level file in Modelsim"
-vlog ${design}.qdi.noclk.flat.cosim.sv +incdir+$PROTEUS_PDK_PATH
-vlog core_db.qdi.noclk.flat.cosim.sv +incdir+$PROTEUS_PDK_PATH
-vlog core_dg.qdi.noclk.flat.cosim.sv +incdir+$PROTEUS_PDK_PATH
-vlog nodemerge.qdi.noclk.flat.cosim.sv +incdir+$PROTEUS_PDK_PATH
-vlog routermerge.qdi.noclk.flat.cosim.sv +incdir+$PROTEUS_PDK_PATH
-vlog arbiter_block.sv +incdir+$PROTEUS_PDK_PATH
-vlog core_db_csp_gold.sv +incdir+$PROTEUS_PDK_PATH
-vlog core_dg_csp_gold.sv +incdir+$PROTEUS_PDK_PATH
-vlog core.sv +incdir+$PROTEUS_PDK_PATH
-vlog path_comp.sv +incdir+$PROTEUS_PDK_PATH
-vlog node.sv +incdir+$PROTEUS_PDK_PATH
-vlog top.sv  +incdir+$PROTEUS_PDK_PATH
-vlog test_bench.sv +incdir+$PROTEUS_PDK_PATH
+vlog ${design}_csp_gold.sv +incdir+$PROTEUS_PDK_PATH
+vlog ${design}.qdi.noclk.flat.cosim.sv 
+vlog ${design}_tb.sv +incdir+$PROTEUS_PDK_PATH
 echo "Creating Modelsim do file"
 /usr/bin/rm run.do
 echo "cd `pwd`" > run.do
-echo "vsim work.tb_module -L $PROTEUS_PDK_PATH/qdi.synth -L $PROTEUS_PDK_PATH/svclib" >> run.do 
-echo "Successful Compliation!"
+echo "vsim work.${design}_cosim_tb -L $PROTEUS_PDK_PATH/qdi.synth -L $PROTEUS_PDK_PATH/svclib" >> run.do 
+echo "Successful Synthesis & Compilation!"
 vsim -do run.do

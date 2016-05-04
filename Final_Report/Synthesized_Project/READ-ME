@@ -1,0 +1,21 @@
+READ-ME
+
+Modelsim Version 10.0B SE
+
+This folder should include:
+
+arbiter_block.sv
+core.sv
+edu.qdi.noclk.flat.cosim.sv
+node.sv
+nodemerge.qdi.noclk.flat.cosim.sv
+path_comp.sv
+routermerge.qdi.noclk.flat.cosim.sv
+run.csh
+test_becnh.sv
+top.sv
+READ-ME
+
+Please run the command: source run.csh
+
+Then in modelsim simulation window, run 4us
