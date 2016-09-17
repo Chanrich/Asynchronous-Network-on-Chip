@@ -1,7 +1,7 @@
 `timescale 1ns/1fs
 //NOTE: you need to compile SystemVerilogCSP.sv as well
 import SystemVerilogCSP::*;
-`define send_count 64
+`define send_count 200
 
 module data_generator (interface data_out);
   parameter FL = 0; //ideal environment
@@ -39,10 +39,10 @@ module data_generator (interface data_out);
 
       // Increment global counter
       tb_module.total_send += 1;
-      //$display("Start module data_gen and time is %d, Send count: %d", $time, tb_module.total_send); 
+      $display("Start module data_gen and time is %d, Send count: %d", $time, tb_module.total_send); 
       counter += 1; // local counter
     end
-    #13;
+    #3;
   end
 endmodule
 
@@ -60,27 +60,28 @@ module data_bucket (interface r);
   begin
       //Save the simulation time when Receive starts
       r.Receive(ReceiveValue);
-      // Calculate Avg Cycle Time
-      time_started = tb_module.time_queue[MYID].pop_back();
-      time_spent_during_travel = $time - time_started ;
-      tb_module.sum_travel_time[MYID] += time_spent_during_travel;
       // Global Receive Count
       tb_module.receive_count = tb_module.receive_count + 1;
       // Global Cycle Count
       tb_module.cycle_queue[MYID] += 1;
       tb_module.throughput[MYID] = tb_module.cycle_queue[MYID] / $time;
-      // $display("Data bucket [%d] is receiving %b | Receive count: %d 
-      //     Bucket Avg Cycle Time: %f, Sum Cycles: %f ", MYID, 
-      //     ReceiveValue, tb_module.receive_count,
-      //      (tb_module.sum_travel_time[MYID]/tb_module.cycle_queue[MYID]), tb_module.sum_travel_time[MYID]);
 
       // Check the receive data if it matched
       queue_check = tb_module.data_queue[MYID].find_first_index(x) with ( x == ReceiveValue);
-      //$display("\tMatching:  Data_queue: %b, Data Received: %b", tb_module.data_queue[MYID][queue_check[0]], ReceiveValue);
       if (tb_module.data_queue[MYID][queue_check[0]] == ReceiveValue) begin
         //$display("\tData matched");
+        time_started = tb_module.time_queue[MYID][queue_check[0]];
+        time_spent_during_travel = $time - time_started ;
+        tb_module.sum_travel_time[MYID] += time_spent_during_travel;
+        tb_module.time_queue[MYID].delete(queue_check[0]);
+
         tb_module.data_queue[MYID].delete(queue_check[0]);
       end
+        $display("Data bucket [%d] is receiving %b | Receive count: %d 
+      Bucket Avg Cycle Time: %f, Sum Cycles: %f ", MYID, 
+      ReceiveValue, tb_module.receive_count,
+       (tb_module.sum_travel_time[MYID]/tb_module.cycle_queue[MYID]), tb_module.sum_travel_time[MYID]);
+
 
       #BL;
   end
@@ -190,27 +191,6 @@ initial
       $display(" =====   Error ===== ");
     else
       $display(" ===== Test Successful ======\n Total Sent: %d Total Received: %d", total_send, receive_count);
-    // result_size = result.size();
-    // while(result.size()!=0)
-    // begin 
-    //   check_count = check_count + 1;
-    //   $display("Checking %d in the queue", check_count);
-    //   result_data = result.pop_front();
-    //   queue_check = original.find_first_index(x) with ( x == result_data);
-    //   $display("at index %d\n\tOriginal: %b, Result: %b", queue_check[0], original[queue_check[0]], result_data);
-    //   if (original[queue_check[0]] == result_data) begin
-    //     $display("matched, remove the item from original");
-    //     original.delete(queue_check[0]);
-    //   end
-    //   $fwrite(fp_result,"%b\n",result_data);
-    // end
-    // $fclose(fp_result); 
-    // $display("Original queue has %d elements left", original.size() );
-    // if (original.size() != 0) begin
-    //   $display("Not matched");
-    // end else begin
-    //   $display("############  Matched  ###########");
-    // end
 
   end 
 

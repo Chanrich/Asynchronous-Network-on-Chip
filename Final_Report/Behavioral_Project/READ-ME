@@ -1,0 +1,17 @@
+READ-ME
+Please Create a new modelsim 10.0b project and include the following file (Also in this order):
+
+SystemVerilogCSP.sv
+edu.sv
+arbiter_block.sv
+path_comp.sv
+core.sv
+edu_tb.sv
+node.sv
+path_comp_tb.sv
+top.sv
+test_bench.sv
+
+Compile & run 4us.
+
+Output will be printed on Transcript window
